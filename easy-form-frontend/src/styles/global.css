@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+:root {
+  --background: 255, 255, 255;
+  --foreground: 0, 0, 0;
+  --muted: 240, 240, 240;
+  --muted-foreground: 115, 115, 115;
+  --popover: 255, 255, 255;
+  --popover-foreground: 0, 0, 0;
+  --card: 255, 255, 255;
+  --card-foreground: 0, 0, 0;
+  --border: 230, 230, 230;
+  --input: 230, 230, 230;
+  --primary: 0, 123, 255;
+  --primary-foreground: 255, 255, 255;
+  --secondary: 240, 240, 240;
+  --secondary-foreground: 0, 0, 0;
+  --accent: 240, 240, 240;
+  --accent-foreground: 0, 0, 0;
+  --destructive: 255, 0, 0;
+  --destructive-foreground: 255, 255, 255;
+  --ring: 0, 123, 255;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 18, 18, 18;
+  --foreground: 255, 255, 255;
+  --muted: 40, 40, 40;
+  --muted-foreground: 180, 180, 180;
+  --popover: 30, 30, 30;
+  --popover-foreground: 255, 255, 255;
+  --card: 30, 30, 30;
+  --card-foreground: 255, 255, 255;
+  --border: 60, 60, 60;
+  --input: 60, 60, 60;
+  --primary: 77, 163, 255;
+  --primary-foreground: 0, 0, 0;
+  --secondary: 40, 40, 40;
+  --secondary-foreground: 255, 255, 255;
+  --accent: 40, 40, 40;
+  --accent-foreground: 255, 255, 255;
+  --destructive: 255, 50, 50;
+  --destructive-foreground: 255, 255, 255;
+  --ring: 77, 163, 255;
+}
+
+:root {
+  background: rgb(var(--background));
+  color: rgb(var(--foreground));
+}
