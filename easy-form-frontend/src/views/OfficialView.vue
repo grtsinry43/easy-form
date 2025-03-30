@@ -453,7 +453,7 @@
   </n-config-provider>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, h, computed } from 'vue'
 import {
   NConfigProvider,

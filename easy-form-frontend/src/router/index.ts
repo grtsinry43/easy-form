@@ -27,6 +27,11 @@ const router = createRouter({
       name: 'official',
       component: () => import('../views/OfficialView.vue'),
     },
+    {
+      path: '/template',
+      name: 'template',
+      component: () => import('../views/TemplateView.vue'),
+    },
   ],
 })
 

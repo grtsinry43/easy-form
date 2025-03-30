@@ -1,6 +1,8 @@
 <template>
-  <div class="w-full bg-gray-50/70 dark:bg-black/70 backdrop-blur-md shadow-sm border-b border-gray-200">
-    <div class="container mx-auto px-4">
+  <div
+    class="w-full bg-gray-50/70 dark:bg-black/70 backdrop-blur-md shadow-sm border-b border-gray-200 fixed top-0 z-20"
+  >
+    <div class="mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <!-- Logo and Brand -->
         <div class="flex items-center">
@@ -52,9 +54,7 @@
                 <BellIcon />
               </template>
             </n-button>
-            <n-button type="primary" class="px-3 py-2">
-              登录
-            </n-button>
+            <n-button type="primary" class="px-3 py-2"> 登录 </n-button>
             <n-dropdown :options="userOptions" @select="handleSelect">
               <n-avatar round size="small" :src="userAvatar">
                 {{ !userAvatar ? 'U' : '' }}

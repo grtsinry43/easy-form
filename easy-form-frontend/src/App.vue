@@ -6,6 +6,11 @@ import customTheme from '@/styles/customTheme.ts'
 import NavBar from '@/components/NavBar.vue'
 
 const { theme, resolvedTheme, setTheme } = useTheme()
+
+const toggleTheme = () => {
+  console.log(resolvedTheme)
+  setTheme(resolvedTheme.value === 'light' ? 'dark' : 'light')
+}
 </script>
 
 <template>
@@ -13,8 +18,11 @@ const { theme, resolvedTheme, setTheme } = useTheme()
     :theme="resolvedTheme === 'light' ? lightTheme : darkTheme"
     :theme-overrides="resolvedTheme === 'dark' ? customTheme.dark : customTheme.light"
   >
-    <NavBar />
-    <RouterView />
+    <n-message-provider>
+      <NavBar />
+      <div class="h-16 w-full"></div>
+      <RouterView />
+    </n-message-provider>
   </n-config-provider>
 </template>
 
