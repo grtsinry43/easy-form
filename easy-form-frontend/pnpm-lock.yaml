@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@vicons/ionicons5':
-        specifier: ^0.13.0
-        version: 0.13.0
       lucide-vue-next:
         specifier: ^0.485.0
         version: 0.485.0(vue@3.5.13(typescript@5.8.2))
@@ -36,6 +33,30 @@ importers:
       '@types/node':
         specifier: ^22.13.9
         version: 22.13.14
+      '@vicons/antd':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@vicons/carbon':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@vicons/fa':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@vicons/fluent':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@vicons/ionicons4':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@vicons/ionicons5':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@vicons/material':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@vicons/tabler':
+        specifier: ^0.13.0
+        version: 0.13.0
       '@vitejs/plugin-vue':
         specifier: ^5.2.1
         version: 5.2.3(vite@6.2.3(@types/node@22.13.14)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
@@ -705,8 +726,29 @@ packages:
     resolution: {integrity: sha512-hbn8SZ8w4u2pRwgQ1GlUrPKE+t2XvcCW5tTRF7j6SMYIuYG37XuzIW44JCZPa36evi0Oy2SnM664BlIaAuQcvg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@vicons/antd@0.13.0':
+    resolution: {integrity: sha512-yrUGoUSz2BbGupk9ghQOahc04n5H3MwUDM9pVPsLh9U1uqB47oRWZvYRiZaT1JKPqgTgSE6BXcVw4i9MOF4M+g==}
+
+  '@vicons/carbon@0.13.0':
+    resolution: {integrity: sha512-Z/jExyyS4gsXJc66oTqV/j98nsaiX2JlQ0IUwu9Ms3rztf8VOHEQRuX8Jey1/zbxJpFY/tU+bWvKPRFYGIvCWQ==}
+
+  '@vicons/fa@0.13.0':
+    resolution: {integrity: sha512-BFcDewcT78fSn4Y/fOgqlswbLUEW3+qJK2iJiNtgmkMzadBVpDXhNyVKsYM3V2uKPvDUrZT0JCWDWVRCiBXJZA==}
+
+  '@vicons/fluent@0.13.0':
+    resolution: {integrity: sha512-bYGZsOE3qzvm3Cm43e7tybgGlr5ZUpYqtRZq0g0Tfupe8jIzLolpvQLNUt1zS8Mgt6goTbUk5YH7Fkv16jkykg==}
+
+  '@vicons/ionicons4@0.13.0':
+    resolution: {integrity: sha512-5WHIl/4R5a4i9GONa+hIQWxg/WczrbsCdqxawHZvdd3drsEr+Q3yzlfS+NNRO4WS3uDW2uWLCwoW+yp5TgcKeQ==}
+
   '@vicons/ionicons5@0.13.0':
     resolution: {integrity: sha512-zvZKBPjEXKN7AXNo2Na2uy+nvuv6SP4KAMQxpKL2vfHMj0fSvuw7JZcOPCjQC3e7ayssKnaoFVAhbYcW6v41qQ==}
+
+  '@vicons/material@0.13.0':
+    resolution: {integrity: sha512-lKVxFNprM+CaBkUH3gt6VjIeiMsKQl2zARQMwTCZruQl2vRHzyeZiKeCflWS99CEfv2JzX/6y697smxlzyxcVw==}
+
+  '@vicons/tabler@0.13.0':
+    resolution: {integrity: sha512-AykuhiqjszkIoAL/7knIFm6RDOBS1ZmQdJfQ+RNLEah0fVsxykUFCfMBSNZh8lOzC85EtdD1k5g/sv5GYk0Ohg==}
 
   '@vitejs/plugin-vue-jsx@4.1.2':
     resolution: {integrity: sha512-4Rk0GdE0QCdsIkuMmWeg11gmM4x8UmTnZR/LWPm7QJ7+BsK4tq08udrN0isrrWqz5heFy9HLV/7bOLgFS8hUjA==}
@@ -2881,7 +2923,21 @@ snapshots:
       '@typescript-eslint/types': 8.28.0
       eslint-visitor-keys: 4.2.0
 
+  '@vicons/antd@0.13.0': {}
+
+  '@vicons/carbon@0.13.0': {}
+
+  '@vicons/fa@0.13.0': {}
+
+  '@vicons/fluent@0.13.0': {}
+
+  '@vicons/ionicons4@0.13.0': {}
+
   '@vicons/ionicons5@0.13.0': {}
+
+  '@vicons/material@0.13.0': {}
+
+  '@vicons/tabler@0.13.0': {}
 
   '@vitejs/plugin-vue-jsx@4.1.2(vite@6.2.3(@types/node@22.13.14)(jiti@2.4.2)(lightningcss@1.29.2)(sass-embedded@1.86.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))':
     dependencies:
