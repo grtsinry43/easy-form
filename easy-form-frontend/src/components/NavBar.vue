@@ -18,30 +18,22 @@
           <!-- Desktop Navigation -->
           <div class="hidden md:block ml-10">
             <div class="flex items-center space-x-4">
-              <n-button text type="primary" class="px-3 py-2">
-                <template #icon>
-                  <HomeIcon class="h-4 w-4 mr-1" />
-                </template>
-                首页
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <LayoutIcon class="h-4 w-4 mr-1" />
-                </template>
-                模板
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <FileTextIcon class="h-4 w-4 mr-1" />
-                </template>
-                表单
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <DatabaseIcon class="h-4 w-4 mr-1" />
-                </template>
-                数据
-              </n-button>
+              <router-link to="/" class="px-3 py-2 flex items-center">
+                <HomeIcon class="h-4 w-4 mr-1" />
+                <span>首页</span>
+              </router-link>
+              <router-link to="/components" class="px-3 py-2 flex items-center">
+                <LayoutIcon class="h-4 w-4 mr-1" />
+                组件中心
+              </router-link>
+              <router-link to="/templates" class="px-3 py-2 flex items-center">
+                <FileTextIcon class="h-4 w-4 mr-1" />
+                模板中心
+              </router-link>
+              <router-link to="/statistics" class="px-3 py-2 flex items-center">
+                <DatabaseIcon class="h-4 w-4 mr-1" />
+                数据统计
+              </router-link>
             </div>
           </div>
         </div>
@@ -49,12 +41,19 @@
         <!-- Right side menu -->
         <div class="hidden md:block">
           <div class="flex items-center space-x-3">
+            <n-button circle @click="setTheme(resolvedTheme === 'light' ? 'dark' : 'light')">
+              <template #icon>
+                <n-icon>
+                  {{ resolvedTheme === 'light' ? 'Moon' : 'Sun' }}
+                </n-icon>
+              </template>
+            </n-button>
             <n-button circle>
               <template #icon>
                 <BellIcon />
               </template>
             </n-button>
-            <n-button type="primary" class="px-3 py-2"> 登录 </n-button>
+            <n-button type="primary" class="px-3 py-2"> 登录</n-button>
             <n-dropdown :options="userOptions" @select="handleSelect">
               <n-avatar round size="small" :src="userAvatar">
                 {{ !userAvatar ? 'U' : '' }}
@@ -130,6 +129,8 @@ import {
   FileIcon as FormIcon,
 } from 'lucide-vue-next'
 
+import { useTheme } from '@/utils/theme.ts'
+
 const mobileMenuOpen = ref(false)
 const userAvatar = ref('')
 
@@ -159,6 +160,8 @@ const handleSelect = (key) => {
     // Handle logout
   }
 }
+
+const { theme, resolvedTheme, setTheme } = useTheme()
 </script>
 
 <style scoped>

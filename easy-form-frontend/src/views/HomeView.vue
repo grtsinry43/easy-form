@@ -7,7 +7,7 @@ const { theme, resolvedTheme, setTheme } = useTheme()
 </script>
 
 <template>
-  <main class="mt-4">
+  <n-layout class="mt-4">
     <n-h1 class="text-center w-full">EasyForm 零代码表单生成器</n-h1>
     <div class="flex m-8">
       <n-button type="success" class="mr-4"> 创建表单</n-button>
@@ -231,5 +231,5 @@ const { theme, resolvedTheme, setTheme } = useTheme()
         </n-space>
       </n-card>
     </div>
-  </main>
+  </n-layout>
 </template>

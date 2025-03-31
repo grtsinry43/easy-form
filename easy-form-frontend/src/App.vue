@@ -21,7 +21,13 @@ const toggleTheme = () => {
     <n-message-provider>
       <NavBar />
       <div class="h-16 w-full"></div>
-      <RouterView />
+      <div class="max-w-screen-2xl mx-auto">
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </div>
     </n-message-provider>
   </n-config-provider>
 </template>
