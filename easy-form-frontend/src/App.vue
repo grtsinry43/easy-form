@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import { computed } from 'vue'
 import { useTheme } from '@/utils/theme.ts'
-import { darkTheme, lightTheme } from 'naive-ui'
+import { darkTheme } from 'naive-ui'
 import customTheme from '@/styles/customTheme.ts'
 import NavBar from '@/components/NavBar.vue'
 
-const { theme, resolvedTheme, setTheme } = useTheme()
+const { resolvedTheme } = useTheme()
 
-const toggleTheme = () => {
-  console.log(resolvedTheme)
-  setTheme(resolvedTheme.value === 'light' ? 'dark' : 'light')
-}
+const naiveTheme = computed(() => (resolvedTheme.value === 'dark' ? darkTheme : null))
+
+const themeOverrides = computed(() =>
+  resolvedTheme.value === 'dark' ? customTheme.dark : customTheme.light,
+)
 </script>
 
 <template>
-  <n-config-provider
-    :theme="resolvedTheme === 'light' ? lightTheme : darkTheme"
-    :theme-overrides="resolvedTheme === 'dark' ? customTheme.dark : customTheme.light"
-  >
+  <n-config-provider :theme="naiveTheme" :theme-overrides="themeOverrides">
     <n-message-provider>
       <NavBar />
       <div class="h-16 w-full"></div>
@@ -25,5 +24,3 @@ const toggleTheme = () => {
     </n-message-provider>
   </n-config-provider>
 </template>
-
-<style scoped></style>

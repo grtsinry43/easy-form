@@ -49,12 +49,19 @@
         <!-- Right side menu -->
         <div class="hidden md:block">
           <div class="flex items-center space-x-3">
+            <!-- 在模板中替换主题切换按钮 -->
+            <n-button circle @click="toggleTheme">
+              <template #icon>
+                <SunIcon v-if="resolvedTheme.value === 'dark'" />
+                <MoonIcon v-else />
+              </template>
+            </n-button>
             <n-button circle>
               <template #icon>
                 <BellIcon />
               </template>
             </n-button>
-            <n-button type="primary" class="px-3 py-2"> 登录 </n-button>
+            <n-button type="primary" class="px-3 py-2"> 登录</n-button>
             <n-dropdown :options="userOptions" @select="handleSelect">
               <n-avatar round size="small" :src="userAvatar">
                 {{ !userAvatar ? 'U' : '' }}
@@ -118,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   HomeIcon,
   LayoutIcon,
@@ -129,9 +136,19 @@ import {
   XIcon,
   FileIcon as FormIcon,
 } from 'lucide-vue-next'
+import { useTheme } from '@/utils/theme.ts'
 
 const mobileMenuOpen = ref(false)
 const userAvatar = ref('')
+
+const { resolvedTheme, setTheme } = useTheme()
+
+const toggleTheme = () => {
+  console.log(resolvedTheme)
+  setTheme(resolvedTheme.value === 'light' ? 'dark' : 'light')
+}
+
+onMounted(() => {})
 
 const userOptions = [
   {

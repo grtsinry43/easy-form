@@ -1,63 +1,35 @@
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 
-export const useTheme = () => {
-  const theme = ref<'light' | 'dark' | 'system'>('system')
-  const resolvedTheme = ref<'light' | 'dark'>('light')
+// 创建全局响应式主题状态
+const themeState = ref(localStorage.getItem('theme') || 'light')
 
-  const getSystemTheme = (): 'light' | 'dark' => {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  }
+export function useTheme() {
+  // 计算属性，确保它是响应式的
+  const resolvedTheme = computed(() => themeState.value)
 
-  const applyTheme = (newTheme: 'light' | 'dark') => {
-    const root = document.documentElement
-    root.classList.remove('light', 'dark')
-    root.classList.add(newTheme)
-    resolvedTheme.value = newTheme
-  }
-
-  const setTheme = (newTheme: 'light' | 'dark' | 'system') => {
-    theme.value = newTheme
+  const setTheme = (newTheme: 'light' | 'dark') => {
+    themeState.value = newTheme
     localStorage.setItem('theme', newTheme)
-    if (newTheme === 'system') {
-      applyTheme(getSystemTheme())
+
+    // 应用到 HTML 元素上，以便 TailwindCSS dark 模式工作
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark')
     } else {
-      applyTheme(newTheme)
+      document.documentElement.classList.remove('dark')
     }
   }
 
-  const mediaQuery = window?.matchMedia('(prefers-color-scheme: dark)')
-  const handleMediaChange = () => {
-    if (theme.value === 'system') {
-      applyTheme(getSystemTheme())
-    }
+  // 初始化主题
+  if (typeof window !== 'undefined') {
+    const savedTheme = localStorage.getItem('theme')
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light')
+
+    // 设置初始主题
+    setTheme(initialTheme as 'light' | 'dark')
   }
-
-  onMounted(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null
-
-    if (savedTheme) {
-      setTheme(savedTheme)
-    } else {
-      setTheme('system')
-    }
-
-    mediaQuery?.addEventListener('change', handleMediaChange)
-  })
-
-  onUnmounted(() => {
-    mediaQuery?.removeEventListener('change', handleMediaChange)
-  })
-
-  watch(theme, (newTheme) => {
-    if (newTheme === 'system') {
-      applyTheme(getSystemTheme())
-    } else {
-      applyTheme(newTheme)
-    }
-  })
 
   return {
-    theme,
     resolvedTheme,
     setTheme,
   }

@@ -76,69 +76,65 @@
                       快速创建专业表单，无需编写代码，拖拽即可完成
                     </n-text>
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                      <n-button type="primary" size="large" class="px-8"> 立即开始 </n-button>
-                      <n-button size="large" class="px-8"> 查看演示 </n-button>
+                      <n-button type="primary" size="large" class="px-8"> 立即开始</n-button>
+                      <n-button size="large" class="px-8"> 查看演示</n-button>
                     </div>
                   </div>
 
                   <!-- Product Preview -->
-                  <div class="max-w-4xl mx-auto">
-                    <n-card class="overflow-hidden" :bordered="false">
+                  <div class="max-w-4xl mx-auto shadow-sm rounded-md">
+                    <div
+                      class="flex rounded-t-md items-center px-4 py-2 bg-[#f5f5f5] dark:bg-[#252525] border-b border-[#ebedf0] dark:border-[#303030]"
+                    >
+                      <div class="flex space-x-2 mr-4">
+                        <div class="w-3 h-3 rounded-full bg-[#ed6a5e]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#f4be4f]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#61c454]"></div>
+                      </div>
+                      <div class="flex-1 h-6 bg-white dark:bg-[#1f1f1f] rounded"></div>
+                    </div>
+                    <div class="p-4 bg-[#f9f9f9] dark:bg-[#1f1f1f] rounded-b-md">
                       <div
-                        class="flex items-center px-4 py-2 bg-[#f5f5f5] dark:bg-[#252525] border-b border-[#ebedf0] dark:border-[#303030]"
+                        class="flex flex-col md:flex-row h-[400px] bg-white dark:bg-[#252525] rounded-lg overflow-hidden border border-[#ebedf0] dark:border-[#303030]"
                       >
-                        <div class="flex space-x-2 mr-4">
-                          <div class="w-3 h-3 rounded-full bg-[#ed6a5e]"></div>
-                          <div class="w-3 h-3 rounded-full bg-[#f4be4f]"></div>
-                          <div class="w-3 h-3 rounded-full bg-[#61c454]"></div>
-                        </div>
-                        <div class="flex-1 h-6 bg-white dark:bg-[#1f1f1f] rounded"></div>
-                      </div>
-                      <div class="p-4 bg-[#f9f9f9] dark:bg-[#1f1f1f]">
+                        <!-- Sidebar -->
                         <div
-                          class="flex flex-col md:flex-row h-[400px] bg-white dark:bg-[#252525] rounded-lg overflow-hidden border border-[#ebedf0] dark:border-[#303030]"
+                          class="w-full md:w-48 bg-[#f5f5f5] dark:bg-[#2a2a2a] p-3 flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto"
                         >
-                          <!-- Sidebar -->
                           <div
-                            class="w-full md:w-48 bg-[#f5f5f5] dark:bg-[#2a2a2a] p-3 flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto"
+                            v-for="i in 6"
+                            :key="`sidebar-${i}`"
+                            class="flex-shrink-0 h-8 w-full bg-white dark:bg-[#303030] rounded"
+                          ></div>
+                        </div>
+
+                        <!-- Canvas -->
+                        <div class="flex-1 p-4 flex flex-col gap-3">
+                          <div
+                            v-for="i in 3"
+                            :key="`form-${i}`"
+                            class="bg-[#f9f9f9] dark:bg-[#2a2a2a] p-3 rounded border border-[#ebedf0] dark:border-[#303030]"
                           >
+                            <div class="h-2 w-24 bg-[#e5e5e5] dark:bg-[#3a3a3a] rounded mb-2"></div>
                             <div
-                              v-for="i in 6"
-                              :key="`sidebar-${i}`"
-                              class="flex-shrink-0 h-8 w-full bg-white dark:bg-[#303030] rounded"
+                              class="h-8 bg-white dark:bg-[#303030] rounded border border-[#ebedf0] dark:border-[#404040]"
                             ></div>
                           </div>
+                          <div class="mt-auto ml-0 h-9 w-28 rounded bg-[#18a058]"></div>
+                        </div>
 
-                          <!-- Canvas -->
-                          <div class="flex-1 p-4 flex flex-col gap-3">
-                            <div
-                              v-for="i in 3"
-                              :key="`form-${i}`"
-                              class="bg-[#f9f9f9] dark:bg-[#2a2a2a] p-3 rounded border border-[#ebedf0] dark:border-[#303030]"
-                            >
-                              <div
-                                class="h-2 w-24 bg-[#e5e5e5] dark:bg-[#3a3a3a] rounded mb-2"
-                              ></div>
-                              <div
-                                class="h-8 bg-white dark:bg-[#303030] rounded border border-[#ebedf0] dark:border-[#404040]"
-                              ></div>
-                            </div>
-                            <div class="mt-auto ml-0 h-9 w-28 rounded bg-[#18a058]"></div>
-                          </div>
-
-                          <!-- Properties -->
+                        <!-- Properties -->
+                        <div
+                          class="w-full md:w-56 bg-[#f5f5f5] dark:bg-[#2a2a2a] p-3 flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto"
+                        >
                           <div
-                            class="w-full md:w-56 bg-[#f5f5f5] dark:bg-[#2a2a2a] p-3 flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto"
-                          >
-                            <div
-                              v-for="i in 4"
-                              :key="`prop-${i}`"
-                              class="flex-shrink-0 h-12 w-full bg-white dark:bg-[#303030] rounded"
-                            ></div>
-                          </div>
+                            v-for="i in 4"
+                            :key="`prop-${i}`"
+                            class="flex-shrink-0 h-12 w-full bg-white dark:bg-[#303030] rounded"
+                          ></div>
                         </div>
                       </div>
-                    </n-card>
+                    </div>
                   </div>
                 </div>
               </section>
@@ -200,7 +196,7 @@
                               <n-rate readonly :value="5" size="small" />
                             </div>
                           </div>
-                          <n-text class="mb-6 italic block"> "{{ testimonial.quote }}" </n-text>
+                          <n-text class="mb-6 italic block"> "{{ testimonial.quote }}"</n-text>
                           <div class="flex items-center">
                             <n-avatar
                               round
@@ -473,182 +469,235 @@ import {
   NNotificationProvider,
   NMessageProvider,
   darkTheme,
-  useOsTheme
+  useOsTheme,
 } from 'naive-ui'
 import { useTheme } from '@/utils/theme.js'
 
 // Icons
-const FormOutlined = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }),
-  h('path', { d: 'M9 3v18' }),
-  h('path', { d: 'M13 7h4' }),
-  h('path', { d: 'M13 11h4' }),
-  h('path', { d: 'M13 15h4' })
-])
+const FormOutlined = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [
+      h('rect', { x: '3', y: '3', width: '18', height: '18', rx: '2' }),
+      h('path', { d: 'M9 3v18' }),
+      h('path', { d: 'M13 7h4' }),
+      h('path', { d: 'M13 11h4' }),
+      h('path', { d: 'M13 15h4' }),
+    ],
+  )
 
-const ThunderboltOutlined = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('path', { d: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z' })
-])
+const ThunderboltOutlined = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [h('path', { d: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z' })],
+  )
 
-const AppstoreOutlined = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('rect', { x: '3', y: '3', width: '7', height: '7' }),
-  h('rect', { x: '14', y: '3', width: '7', height: '7' }),
-  h('rect', { x: '14', y: '14', width: '7', height: '7' }),
-  h('rect', { x: '3', y: '14', width: '7', height: '7' })
-])
+const AppstoreOutlined = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [
+      h('rect', { x: '3', y: '3', width: '7', height: '7' }),
+      h('rect', { x: '14', y: '3', width: '7', height: '7' }),
+      h('rect', { x: '14', y: '14', width: '7', height: '7' }),
+      h('rect', { x: '3', y: '14', width: '7', height: '7' }),
+    ],
+  )
 
-const SafetyCertificateOutlined = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('path', { d: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' }),
-  h('path', { d: 'M9 12l2 2 4-4' })
-])
+const SafetyCertificateOutlined = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [
+      h('path', { d: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' }),
+      h('path', { d: 'M9 12l2 2 4-4' }),
+    ],
+  )
 
-const MobileOutlined = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('rect', { x: '5', y: '2', width: '14', height: '20', rx: '2', ry: '2' }),
-  h('path', { d: 'M12 18h.01' })
-])
+const MobileOutlined = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [
+      h('rect', { x: '5', y: '2', width: '14', height: '20', rx: '2', ry: '2' }),
+      h('path', { d: 'M12 18h.01' }),
+    ],
+  )
 
-const ApiOutlined = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('path', { d: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' }),
-  h('path', { d: 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' })
-])
+const ApiOutlined = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [
+      h('path', { d: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71' }),
+      h('path', { d: 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71' }),
+    ],
+  )
 
-const SunIcon = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('circle', { cx: '12', cy: '12', r: '5' }),
-  h('path', { d: 'M12 1v2' }),
-  h('path', { d: 'M12 21v2' }),
-  h('path', { d: 'M4.22 4.22l1.42 1.42' }),
-  h('path', { d: 'M18.36 18.36l1.42 1.42' }),
-  h('path', { d: 'M1 12h2' }),
-  h('path', { d: 'M21 12h2' }),
-  h('path', { d: 'M4.22 19.78l1.42-1.42' }),
-  h('path', { d: 'M18.36 5.64l1.42-1.42' })
-])
+const SunIcon = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [
+      h('circle', { cx: '12', cy: '12', r: '5' }),
+      h('path', { d: 'M12 1v2' }),
+      h('path', { d: 'M12 21v2' }),
+      h('path', { d: 'M4.22 4.22l1.42 1.42' }),
+      h('path', { d: 'M18.36 18.36l1.42 1.42' }),
+      h('path', { d: 'M1 12h2' }),
+      h('path', { d: 'M21 12h2' }),
+      h('path', { d: 'M4.22 19.78l1.42-1.42' }),
+      h('path', { d: 'M18.36 5.64l1.42-1.42' }),
+    ],
+  )
 
-const MoonIcon = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('path', { d: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z' })
-])
+const MoonIcon = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [h('path', { d: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z' })],
+  )
 
-const CheckIcon = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('polyline', { points: '20 6 9 17 4 12' })
-])
+const CheckIcon = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [h('polyline', { points: '20 6 9 17 4 12' })],
+  )
 
-const TwitterIcon = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('path', { d: 'M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z' })
-])
+const TwitterIcon = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [
+      h('path', {
+        d: 'M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z',
+      }),
+    ],
+  )
 
-const GithubIcon = () => h('svg', {
-  xmlns: 'http://www.w3.org/2000/svg',
-  width: '1em',
-  height: '1em',
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  'stroke-width': '2',
-  'stroke-linecap': 'round',
-  'stroke-linejoin': 'round'
-}, [
-  h('path', { d: 'M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22' })
-])
+const GithubIcon = () =>
+  h(
+    'svg',
+    {
+      xmlns: 'http://www.w3.org/2000/svg',
+      width: '1em',
+      height: '1em',
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      'stroke-width': '2',
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round',
+    },
+    [
+      h('path', {
+        d: 'M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22',
+      }),
+    ],
+  )
 
 // const LinkedinIcon = () => h('svg', {
 //     xmlns: 'http://www.w3.org/2000/svg',
@@ -674,12 +723,11 @@ const GithubIcon = () => h('svg', {
 //   h('circle', { cx: '4', cy: '4', r: '2' })
 // ])
 
-
 // Theme
 const osThemeRef = useOsTheme()
 const isDark = ref(osThemeRef.value === 'dark')
 const theme = computed(() => (isDark.value ? darkTheme : null))
-const {setTheme } = useTheme()
+const { setTheme } = useTheme()
 
 const toggleTheme = () => {
   isDark.value = !isDark.value
@@ -691,33 +739,33 @@ const features = ref([
   {
     icon: FormOutlined,
     title: '拖拽式设计',
-    description: '简单拖拽即可创建专业表单，无需编写代码'
+    description: '简单拖拽即可创建专业表单，无需编写代码',
   },
   {
     icon: ThunderboltOutlined,
     title: '快速部署',
-    description: '一键发布您的表单，立即开始收集数据'
+    description: '一键发布您的表单，立即开始收集数据',
   },
   {
     icon: AppstoreOutlined,
     title: '丰富组件',
-    description: '50+ 预设组件满足各种表单需求'
+    description: '50+ 预设组件满足各种表单需求',
   },
   {
     icon: SafetyCertificateOutlined,
     title: '数据安全',
-    description: '企业级数据加密，保障您的信息安全'
+    description: '企业级数据加密，保障您的信息安全',
   },
   {
     icon: MobileOutlined,
     title: '响应式设计',
-    description: '在任何设备上都能完美展示您的表单'
+    description: '在任何设备上都能完美展示您的表单',
   },
   {
     icon: ApiOutlined,
     title: 'API 集成',
-    description: '轻松与第三方服务集成，实现数据流转'
-  }
+    description: '轻松与第三方服务集成，实现数据流转',
+  },
 ])
 
 // Testimonials data
@@ -725,18 +773,18 @@ const testimonials = ref([
   {
     quote: 'EasyForm 帮助我们在一周内完成了原本需要一个月的表单开发工作，极大提高了工作效率。',
     name: '张经理',
-    title: '某科技公司产品总监'
+    title: '某科技公司产品总监',
   },
   {
     quote: '作为一个非技术人员，我能够独立创建复杂的调查问卷，这在以前是不可能的。',
     name: '李女士',
-    title: '市场研究专员'
+    title: '市场研究专员',
   },
   {
     quote: 'EasyForm 的客户支持团队非常专业，他们帮助我们解决了所有问题。',
     name: '王先生',
-    title: '创业公司 CEO'
-  }
+    title: '创业公司 CEO',
+  },
 ])
 </script>
 
