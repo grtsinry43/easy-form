@@ -1,6 +1,8 @@
 <template>
-  <div class="w-full bg-white shadow-sm border-b border-gray-200">
-    <div class="container mx-auto px-4">
+  <div
+    class="w-full bg-gray-50/70 dark:bg-black/70 backdrop-blur-md shadow-sm border-b border-gray-200 fixed top-0 z-20"
+  >
+    <div class="mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <!-- Logo and Brand -->
         <div class="flex items-center">
@@ -12,34 +14,42 @@
               <span class="font-bold text-lg text-gray-800">EasyForm</span>
             </div>
           </div>
-
+67
           <!-- Desktop Navigation -->
           <div class="hidden md:block ml-10">
             <div class="flex items-center space-x-4">
-              <n-button text type="primary" class="px-3 py-2">
-                <template #icon>
-                  <HomeIcon class="h-4 w-4 mr-1" />
-                </template>
-                首页
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <LayoutIcon class="h-4 w-4 mr-1" />
-                </template>
-                模板
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <FileTextIcon class="h-4 w-4 mr-1" />
-                </template>
-                表单
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <DatabaseIcon class="h-4 w-4 mr-1" />
-                </template>
-                数据
-              </n-button>
+              <router-link to="/">
+                <n-button text type="primary" class="px-3 py-2">
+                  <template #icon>
+                    <HomeIcon class="h-4 w-4 mr-1" />
+                  </template>
+                  首页
+                </n-button>
+              </router-link>
+              <router-link to="/components">
+                <n-button text class="px-3 py-2">
+                  <template #icon>
+                    <LayoutIcon class="h-4 w-4 mr-1" />
+                  </template>
+                  组件中心
+                </n-button>
+              </router-link>
+              <router-link to="/templates">
+                <n-button text class="px-3 py-2">
+                  <template #icon>
+                    <FileTextIcon class="h-4 w-4 mr-1" />
+                  </template>
+                  模板中心
+                </n-button>
+              </router-link>
+              <router-link to="/">
+                <n-button text class="px-3 py-2">
+                  <template #icon>
+                    <DatabaseIcon class="h-4 w-4 mr-1" />
+                  </template>
+                  数据统计
+                </n-button>
+              </router-link>
             </div>
           </div>
         </div>
@@ -47,11 +57,19 @@
         <!-- Right side menu -->
         <div class="hidden md:block">
           <div class="flex items-center space-x-3">
+            <!-- 在模板中替换主题切换按钮 -->
+            <n-button circle @click="toggleTheme">
+              <template #icon>
+                <SunIcon v-if="resolvedTheme.value === 'dark'" />
+                <MoonIcon v-else />
+              </template>
+            </n-button>
             <n-button circle>
               <template #icon>
                 <BellIcon />
               </template>
             </n-button>
+            <n-button type="primary" class="px-3 py-2"> 登录</n-button>
             <n-dropdown :options="userOptions" @select="handleSelect">
               <n-avatar round size="small" :src="userAvatar">
                 {{ !userAvatar ? 'U' : '' }}
@@ -115,7 +133,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   HomeIcon,
   LayoutIcon,
@@ -126,9 +144,19 @@ import {
   XIcon,
   FileIcon as FormIcon,
 } from 'lucide-vue-next'
+import { useTheme } from '@/utils/theme.ts'
 
 const mobileMenuOpen = ref(false)
 const userAvatar = ref('')
+
+const { resolvedTheme, setTheme } = useTheme()
+
+const toggleTheme = () => {
+  console.log(resolvedTheme)
+  setTheme(resolvedTheme.value === 'light' ? 'dark' : 'light')
+}
+
+onMounted(() => {})
 
 const userOptions = [
   {
