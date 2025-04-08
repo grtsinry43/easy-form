@@ -68,7 +68,7 @@ export default defineComponent({
 }
 
 .selected-card {
-  border-color: var(--primary-color, #18a058);
+  border-color: var(--primary, #18a058);
 }
 
 .option-image {

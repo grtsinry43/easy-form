@@ -5,6 +5,7 @@ import { useTheme } from '@/utils/theme.ts'
 import { darkTheme } from 'naive-ui'
 import customTheme from '@/styles/customTheme.ts'
 import NavBar from '@/components/NavBar.vue'
+import { zhCN, dateZhCN } from 'naive-ui'
 
 const { resolvedTheme } = useTheme()
 
@@ -16,7 +17,12 @@ const themeOverrides = computed(() =>
 </script>
 
 <template>
-  <n-config-provider :theme="naiveTheme" :theme-overrides="themeOverrides">
+  <n-config-provider
+    :theme="naiveTheme"
+    :theme-overrides="themeOverrides"
+    :locale="zhCN"
+    :date-locale="dateZhCN"
+  >
     <n-message-provider>
       <NavBar />
       <div class="h-16 w-full"></div>

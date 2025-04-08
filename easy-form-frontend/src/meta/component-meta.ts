@@ -23,21 +23,30 @@ const componentTypes = ref([
     title: '文本输入',
     icon: markRaw(DrawText20Filled),
     path: '/input',
-    buttons: [],
+    buttons: [
+      { text: '单行文本', id: 'single-line' },
+      { text: '多行文本', id: 'multi-line' },
+    ],
   },
   {
     id: 'advanced',
     title: '高级题型',
     icon: markRaw(FileSearchOutlined),
     path: '/advanced',
-    buttons: [],
+    buttons: [
+      { text: '评分题', id: 'rating' },
+      { text: '时间选择', id: 'time' },
+    ],
   },
   {
     id: 'remark',
     title: '备注说明',
     icon: markRaw(Chat),
     path: '/remark',
-    buttons: [],
+    buttons: [
+      { text: '文本说明', id: 'text' },
+      { text: '图片说明', id: 'image' },
+    ],
   },
   {
     id: 'profile',

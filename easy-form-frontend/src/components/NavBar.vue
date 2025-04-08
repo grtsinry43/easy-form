@@ -11,15 +11,14 @@
               <div class="text-primary text-2xl mr-2">
                 <FormIcon />
               </div>
-              <span class="font-bold text-lg text-gray-800">EasyForm</span>
+              <span class="font-bold text-lg">EasyForm</span>
             </div>
           </div>
-67
           <!-- Desktop Navigation -->
           <div class="hidden md:block ml-10">
             <div class="flex items-center space-x-4">
               <router-link to="/">
-                <n-button text type="primary" class="px-3 py-2">
+                <n-button text class="px-3 py-2">
                   <template #icon>
                     <HomeIcon class="h-4 w-4 mr-1" />
                   </template>
@@ -60,7 +59,7 @@
             <!-- 在模板中替换主题切换按钮 -->
             <n-button circle @click="toggleTheme">
               <template #icon>
-                <SunIcon v-if="resolvedTheme.value === 'dark'" />
+                <SunIcon v-if="resolvedTheme === 'dark'" />
                 <MoonIcon v-else />
               </template>
             </n-button>
@@ -143,6 +142,8 @@ import {
   MenuIcon,
   XIcon,
   FileIcon as FormIcon,
+  SunIcon,
+  MoonIcon,
 } from 'lucide-vue-next'
 import { useTheme } from '@/utils/theme.ts'
 
@@ -152,7 +153,6 @@ const userAvatar = ref('')
 const { resolvedTheme, setTheme } = useTheme()
 
 const toggleTheme = () => {
-  console.log(resolvedTheme)
   setTheme(resolvedTheme.value === 'light' ? 'dark' : 'light')
 }
 
