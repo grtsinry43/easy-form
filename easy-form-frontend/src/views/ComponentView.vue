@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import componentTypes from '@/meta/component-meta.ts'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const router = useRouter()
 
@@ -34,7 +36,9 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
                   <n-button
                     v-for="btn in type.buttons"
                     :key="btn.id"
-                    :type="btn.isPrimary ? 'primary' : undefined"
+                    :type="
+                      route.path === `/components/${type.id}/${btn.id}` ? 'primary' : 'default'
+                    "
                     @click="navigateToComponent(type.id, btn.id)"
                   >
                     {{ btn.text }}
@@ -55,7 +59,7 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
           :max="1"
         >
           <template #1>
-            <div class="p-4 h-full overflow-auto">
+            <div class="p-8 h-full overflow-auto">
               <router-view v-slot="{ Component, route }">
                 <transition name="nested-transition" mode="out-in" appear>
                   <div>

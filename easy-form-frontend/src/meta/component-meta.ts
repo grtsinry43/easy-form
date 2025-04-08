@@ -11,11 +11,11 @@ const componentTypes = ref([
     icon: markRaw(CheckBoxTwotone),
     path: '/select',
     buttons: [
-      { text: '单选题', id: 'single-choice', isPrimary: true },
-      { text: '多选题', id: 'multiple-choice', isPrimary: false },
-      { text: '下拉选择题', id: 'dropdown', isPrimary: false },
-      { text: '图片单选题', id: 'image-single', isPrimary: false },
-      { text: '图片多选题', id: 'image-multiple', isPrimary: false },
+      { text: '单选题', id: 'single-choice' },
+      { text: '多选题', id: 'multiple-choice' },
+      { text: '下拉选择题', id: 'dropdown' },
+      { text: '图片单选题', id: 'image-single' },
+      { text: '图片多选题', id: 'image-multiple' },
     ],
   },
   {

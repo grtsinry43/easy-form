@@ -20,11 +20,12 @@ const themeOverrides = computed(() =>
     <n-message-provider>
       <NavBar />
       <div class="h-16 w-full"></div>
-      <router-view v-slot="{ Component, route }">
-        <transition name="page-transition" mode="out-in" appear>
-          <component :is="Component" :key="route.path" />
-        </transition>
-      </router-view>
+      <!--<router-view v-slot="{ Component, route }">-->
+      <!--  <transition name="page-transition" mode="out-in" appear>-->
+      <!--    <component :is="Component" :key="route.path" />-->
+      <!--  </transition>-->
+      <!--</router-view>-->
+      <router-view />
     </n-message-provider>
   </n-config-provider>
 </template>
