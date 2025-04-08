@@ -14,34 +14,42 @@
               <span class="font-bold text-lg text-gray-800">EasyForm</span>
             </div>
           </div>
-
+67
           <!-- Desktop Navigation -->
           <div class="hidden md:block ml-10">
             <div class="flex items-center space-x-4">
-              <n-button text type="primary" class="px-3 py-2">
-                <template #icon>
-                  <HomeIcon class="h-4 w-4 mr-1" />
-                </template>
-                首页
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <LayoutIcon class="h-4 w-4 mr-1" />
-                </template>
-                模板
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <FileTextIcon class="h-4 w-4 mr-1" />
-                </template>
-                表单
-              </n-button>
-              <n-button text class="px-3 py-2">
-                <template #icon>
-                  <DatabaseIcon class="h-4 w-4 mr-1" />
-                </template>
-                数据
-              </n-button>
+              <router-link to="/">
+                <n-button text type="primary" class="px-3 py-2">
+                  <template #icon>
+                    <HomeIcon class="h-4 w-4 mr-1" />
+                  </template>
+                  首页
+                </n-button>
+              </router-link>
+              <router-link to="/components">
+                <n-button text class="px-3 py-2">
+                  <template #icon>
+                    <LayoutIcon class="h-4 w-4 mr-1" />
+                  </template>
+                  组件中心
+                </n-button>
+              </router-link>
+              <router-link to="/templates">
+                <n-button text class="px-3 py-2">
+                  <template #icon>
+                    <FileTextIcon class="h-4 w-4 mr-1" />
+                  </template>
+                  模板中心
+                </n-button>
+              </router-link>
+              <router-link to="/">
+                <n-button text class="px-3 py-2">
+                  <template #icon>
+                    <DatabaseIcon class="h-4 w-4 mr-1" />
+                  </template>
+                  数据统计
+                </n-button>
+              </router-link>
             </div>
           </div>
         </div>

@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import { Delete24Regular, DocumentEdit20Regular } from '@vicons/fluent'
-import NavBar from '@/components/NavBar.vue'
-import { useTheme } from '@/utils/theme.ts'
-
-const { theme, resolvedTheme, setTheme } = useTheme()
 </script>
 
 <template>

@@ -20,7 +20,30 @@ const themeOverrides = computed(() =>
     <n-message-provider>
       <NavBar />
       <div class="h-16 w-full"></div>
-      <RouterView />
+      <router-view v-slot="{ Component, route }">
+        <transition name="page-transition" mode="out-in" appear>
+          <component :is="Component" :key="route.path" />
+        </transition>
+      </router-view>
     </n-message-provider>
   </n-config-provider>
 </template>
+
+<style>
+.page-transition-enter-active,
+.page-transition-leave-active {
+  transition: all 0.2s ease;
+}
+
+.page-transition-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(5px);
+}
+
+.page-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+  filter: blur(5px);
+}
+</style>

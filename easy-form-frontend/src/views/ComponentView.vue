@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import componentTypes from '@/meta/component-meta.ts'
+import { useRouter } from 'vue-router'
 
-// Component state
-const leftPaneContent = ref('左侧内容区域')
-const rightPaneContent = ref('右侧内容区域')
+const router = useRouter()
+
+const navigateToComponent = (typeId: string, buttonId: string) => {
+  router.push(`/components/${typeId}/${buttonId}`)
+}
 </script>
 
 <template>
@@ -12,39 +15,58 @@ const rightPaneContent = ref('右侧内容区域')
       direction="horizontal"
       class="h-full w-full"
       :default-size="0.25"
-      :resize-trigger-size="4"
-      :min="0.20"
+      :resize-trigger-size="2"
+      :min="0.2"
       :max="0.35"
     >
       <template #1>
-        <div class="p-4 h-full overflow-auto">
-          <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4 h-full">
-            {{ leftPaneContent }}
-          </div>
-        </div>
+        <nav class="p-4 h-full overflow-auto">
+          <n-collapse arrow-placement="right" :default-expanded-names="['select']">
+            <n-collapse-item v-for="type in componentTypes" :key="type.id" :name="type.id">
+              <template #header>
+                <n-icon class="mr-2">
+                  <component :is="type.icon" />
+                </n-icon>
+                <div>{{ type.title }}</div>
+              </template>
+              <template #default>
+                <n-flex v-if="type.buttons && type.buttons.length">
+                  <n-button
+                    v-for="btn in type.buttons"
+                    :key="btn.id"
+                    :type="btn.isPrimary ? 'primary' : undefined"
+                    @click="navigateToComponent(type.id, btn.id)"
+                  >
+                    {{ btn.text }}
+                  </n-button>
+                </n-flex>
+              </template>
+            </n-collapse-item>
+          </n-collapse>
+        </nav>
       </template>
       <template #2>
         <n-split
           direction="horizontal"
           class="h-full w-full"
           :default-size="0.7"
-          :resize-trigger-size="4"
+          :resize-trigger-size="2"
           :min="0.5"
           :max="1"
         >
           <template #1>
             <div class="p-4 h-full overflow-auto">
-              <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4 h-full">
-                {{ leftPaneContent }}
-              </div>
+              <router-view v-slot="{ Component, route }">
+                <transition name="nested-transition" mode="out-in" appear>
+                  <div>
+                    <component :is="Component" :key="route.path" />
+                  </div>
+                </transition>
+              </router-view>
             </div>
           </template>
           <template #2>
-            <div class="p-4 h-full overflow-auto">
-              <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4 h-full">
-                {{ rightPaneContent }}
-              </div>
-            </div>
+            <div class="p-4 h-full overflow-auto">6868</div>
           </template>
         </n-split>
       </template>
@@ -55,4 +77,19 @@ const rightPaneContent = ref('右侧内容区域')
   </div>
 </template>
 
-<style scoped></style>
+<style>
+.nested-transition-enter-active,
+.nested-transition-leave-active {
+  transition: all 0.2s ease;
+}
+
+.nested-transition-enter-from {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.nested-transition-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+</style>
