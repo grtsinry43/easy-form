@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import componentTypes from '@/meta/component-meta.ts'
 import { useRouter, useRoute } from 'vue-router'
+import { useMaterialStore } from '@/stores/material-components.ts'
 
 const route = useRoute()
 
 const router = useRouter()
+
+const store = useMaterialStore()
 
 const navigateToComponent = (typeId: string, buttonId: string) => {
   router.push(`/components/${typeId}/${buttonId}`)
@@ -63,7 +66,12 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
               <router-view v-slot="{ Component, route }">
                 <transition name="nested-transition" mode="out-in" appear>
                   <div>
-                    <component :is="Component" :key="route.path" />
+                    <component
+                      :is="Component"
+                      :key="route.path"
+                      :value="store.components[store.currentMaterialCom].value"
+                      :serialNum="1"
+                    />
                   </div>
                 </transition>
               </router-view>

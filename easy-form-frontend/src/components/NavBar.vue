@@ -177,7 +177,7 @@ const userOptions = [
   },
 ]
 
-const handleSelect = (key) => {
+const handleSelect = (key: string) => {
   console.log('Selected:', key)
   // Handle dropdown selection
   if (key === 'logout') {
