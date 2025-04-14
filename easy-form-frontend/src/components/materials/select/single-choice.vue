@@ -8,11 +8,12 @@ import {
   getCurrentValue,
   getStringValueByCurrentValue,
 } from '@/utils/get-value.ts'
-import type { OptionsValue } from '@/types'
+
+import type { SingleSelectValue } from '@/configs/initialValue/single-select.ts'
 
 const props = defineProps<{
   serialNum: number
-  value: OptionsValue
+  value: SingleSelectValue
 }>()
 
 const computedState = computed(() => ({

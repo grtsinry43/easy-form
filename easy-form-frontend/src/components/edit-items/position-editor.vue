@@ -5,8 +5,8 @@ defineProps({
     default: ['left', 'center'],
   },
   currentValue: {
-    type: String,
-    default: '',
+    type: Number,
+    default: 0,
   },
 })
 </script>

@@ -12,8 +12,8 @@
         <span class="mr-2">{{ serialNum }}.</span>
         <span
           :class="{
-            'font-bold': !titleWeight,
-            italic: !titleItalic,
+            'font-bold': titleWeight,
+            italic: titleItalic,
           }"
         >
           {{ title }}
@@ -23,8 +23,8 @@
       <div
         class="mt-2"
         :class="{
-          'font-bold': !descWeight,
-          italic: !descItalic,
+          'font-bold': descWeight,
+          italic: descItalic,
         }"
         :style="{
           fontSize: `${descSize}px`,
