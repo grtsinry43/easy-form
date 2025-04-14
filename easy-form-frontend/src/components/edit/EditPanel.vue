@@ -14,7 +14,6 @@ const store = useMaterialStore()
         :key="key"
         :class="{
           'inline-block mb-2 mr-2': [
-            'size-editor',
             'weight-editor',
             'italic-editor',
             'color-editor',

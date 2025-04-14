@@ -15,5 +15,5 @@ const options = computed(() =>
 </script>
 
 <template>
-  <n-select  :value="currentValue" :options="options" placeholder="选择字体大小" />
+  <n-select class="w-30 mb-2" :value="currentValue" :options="options" placeholder="选择字体大小" />
 </template>

@@ -15,9 +15,11 @@ const buttonProps = computed(() => {
 </script>
 
 <template>
-  <n-button v-bind="buttonProps">
-    <n-icon>
-      <ItalicOutlined />
-    </n-icon>
-  </n-button>
+  <n-space class="w-full">
+    <n-button v-bind="buttonProps">
+      <n-icon>
+        <ItalicOutlined />
+      </n-icon>
+    </n-button>
+  </n-space>
 </template>

@@ -25,5 +25,7 @@ const swatches = [
 </script>
 
 <template>
-  <n-color-picker :value="props.value" :swatches="swatches" class="w-10" />
+  <n-space class="translate-y-2.5">
+    <n-color-picker :value="props.value" :swatches="swatches" class="w-20" />
+  </n-space>
 </template>
