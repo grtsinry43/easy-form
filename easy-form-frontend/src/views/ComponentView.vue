@@ -2,6 +2,7 @@
 import componentTypes from '@/meta/component-meta.ts'
 import { useRouter, useRoute } from 'vue-router'
 import { useMaterialStore } from '@/stores/material-components.ts'
+import EditPanel from '@/components/edit/EditPanel.vue'
 
 const route = useRoute()
 
@@ -69,7 +70,7 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
                     <component
                       :is="Component"
                       :key="route.path"
-                      :value="store.components[store.currentMaterialCom].value"
+                      :value="store.components[store.currentMaterialComponent].value"
                       :serialNum="1"
                     />
                   </div>
@@ -78,7 +79,9 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
             </div>
           </template>
           <template #2>
-            <div class="p-4 h-full overflow-auto">6868</div>
+            <div class="p-4 h-full overflow-auto">
+              <EditPanel />
+            </div>
           </template>
         </n-split>
       </template>

@@ -1,28 +1,23 @@
-<template>
-  <n-space vertical>
-    <n-radio-group v-model:value="value">
-      <n-radio v-for="option in options" :key="option.value" :value="option.value">
-        {{ option.label }}
-      </n-radio>
-    </n-radio-group>
-  </n-space>
-</template>
+<script setup lang="ts">
+import { defineProps, computed } from 'vue'
+import { BoldOutlined } from '@vicons/antd'
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+const props = defineProps<{
+  value: string[]
+  currentValue: number
+}>()
 
-export default defineComponent({
-  setup() {
-    const value = ref(1)
-    const options = [
-      { label: '加粗', value: 0 },
-      { label: '正常', value: 1 },
-    ]
-
-    return {
-      value,
-      options,
-    }
-  },
+const buttonProps = computed(() => {
+  return props.currentValue === 1
+    ? { strong: true, secondary: true, type: 'primary' } // "加粗"
+    : { quaternary: true } // "正常"
 })
 </script>
+
+<template>
+    <n-button v-bind="buttonProps">
+      <n-icon>
+        <BoldOutlined />
+      </n-icon>
+    </n-button>
+</template>

@@ -1,28 +1,26 @@
-<template>
-  <n-space vertical>
-    <n-radio-group v-model:value="value">
-      <n-radio v-for="option in options" :key="option.value" :value="option.value">
-        {{ option.label }}
-      </n-radio>
-    </n-radio-group>
-  </n-space>
-</template>
-
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-
-export default defineComponent({
-  setup() {
-    const value = ref(0)
-    const options = [
-      { label: '左对齐', value: 0 },
-      { label: '居中对齐', value: 1 },
-    ]
-
-    return {
-      value,
-      options,
-    }
+<script setup lang="ts">
+defineProps({
+  value: {
+    type: Array<string>,
+    default: ['left', 'center'],
+  },
+  currentValue: {
+    type: String,
+    default: '',
   },
 })
 </script>
+
+<template>
+  <n-space vertical>
+    <n-p class="font-bold">题目对齐方式</n-p>
+    <n-radio-group :value="currentValue">
+      <n-radio-button
+        v-for="option in value"
+        :key="option"
+        :value="value.indexOf(option)"
+        :label="option"
+      />
+    </n-radio-group>
+  </n-space>
+</template>

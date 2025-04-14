@@ -1,17 +1,15 @@
-<template>
-  <n-space vertical>
-    <n-input v-model:value="value" type="textarea" placeholder="请输入描述文本" />
-  </n-space>
-</template>
-
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-
-export default defineComponent({
-  setup() {
-    return {
-      value: ref(null),
-    }
+<script setup lang="ts">
+defineProps({
+  value: {
+    type: String,
+    default: '',
   },
 })
 </script>
+
+<template>
+  <n-space vertical class="mb-2">
+    <n-p class="font-bold">题目描述</n-p>
+    <n-input :value="value" type="textarea" placeholder="请输入题目描述" />
+  </n-space>
+</template>
