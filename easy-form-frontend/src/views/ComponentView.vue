@@ -43,7 +43,10 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
                     :type="
                       route.path === `/components/${type.id}/${btn.id}` ? 'primary' : 'default'
                     "
-                    @click="navigateToComponent(type.id, btn.id)"
+                    @click="()=>{
+                      navigateToComponent(type.id, btn.id)
+                      store.setCurrentMaterialComponent(btn.id)
+                    }"
                   >
                     {{ btn.text }}
                   </n-button>
@@ -66,13 +69,24 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
             <div class="p-8 h-full overflow-auto">
               <router-view v-slot="{ Component, route }">
                 <transition name="nested-transition" mode="out-in" appear>
-                  <div>
-                    <component
-                      :is="Component"
-                      :key="route.path"
-                      :value="store.components[store.currentMaterialComponent].value"
-                      :serialNum="1"
-                    />
+                  <div class="flex justify-center items-center">
+                    <div
+                      :class="{
+                        'w-full':
+                          store.components[store.currentMaterialComponent].value.position
+                            .currentValue === 0,
+                        'mx-auto text-center':
+                          store.components[store.currentMaterialComponent].value.position
+                            .currentValue === 1,
+                      }"
+                    >
+                      <component
+                        :is="Component"
+                        :key="route.path"
+                        :value="store.components[store.currentMaterialComponent].value"
+                        :serialNum="1"
+                      />
+                    </div>
                   </div>
                 </transition>
               </router-view>
@@ -80,7 +94,6 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
           </template>
           <template #2>
             <div class="p-4 h-full overflow-auto">
-              {{store.components[store.currentMaterialComponent].value.position}}
               <EditPanel />
             </div>
           </template>

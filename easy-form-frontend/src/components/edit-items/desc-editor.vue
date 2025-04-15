@@ -16,7 +16,7 @@ const handleInput = (val: string) => {
 </script>
 
 <template>
-  <n-space vertical class="mb-2">
+  <n-space vertical class="mb-2 mt-4">
     <n-p class="font-bold">题目描述</n-p>
     <n-input
       :value="value"

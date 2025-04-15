@@ -26,7 +26,7 @@ const handleChange = (value: number) => {
 </script>
 
 <template>
-  <n-space vertical>
+  <n-space vertical class="mb-2 mt-4">
     <n-p class="font-bold">题目对齐方式</n-p>
     <n-radio-group :value="currentValue" @update:value="handleChange">
       <n-radio-button

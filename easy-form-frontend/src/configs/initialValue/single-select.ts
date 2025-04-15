@@ -10,6 +10,7 @@ import WeightEditor from '@/components/edit-items/weight-editor.vue'
 import ItalicEditor from '@/components/edit-items/italic-editor.vue'
 import ColorEditor from '@/components/edit-items/color-editor.vue'
 import type { BaseComponentType, ComponentProperty } from '@/types/material.ts'
+import { useTheme } from '@/utils/theme.ts'
 
 export type SingleSelectValue = {
   title: ComponentProperty & { value: string }
@@ -27,6 +28,7 @@ export type SingleSelectValue = {
 }
 
 export default function () {
+  const {resolvedTheme} = useTheme();
   return {
     id: uuidV4(),
     component: markRaw(SingleChoice),
@@ -49,7 +51,7 @@ export default function () {
       },
       titleWeight: {
         id: uuidV4(),
-        currentValue: 0,
+        currentValue: 1,
         value: ['正常', '加粗'],
         isShow: true,
         type: 'weight-editor',
@@ -65,7 +67,7 @@ export default function () {
       },
       titleColor: {
         id: uuidV4(),
-        value: '#000',
+        value: resolvedTheme.value === 'dark' ? '#fff' : '#000',
         isShow: true,
         type: 'color-editor',
         editComponent: markRaw(ColorEditor),
@@ -89,7 +91,7 @@ export default function () {
 
       descWeight: {
         id: uuidV4(),
-        currentValue: 1,
+        currentValue: 0,
         value: ['正常', '加粗'],
         isShow: true,
         type: 'weight-editor',
@@ -107,7 +109,7 @@ export default function () {
 
       descColor: {
         id: uuidV4(),
-        value: '#909399',
+        value: resolvedTheme.value === 'dark' ? '#ccc' : '#333',
         isShow: true,
         type: 'color-editor',
         editComponent: markRaw(ColorEditor),
@@ -123,7 +125,7 @@ export default function () {
       position: {
         id: uuidV4(),
         currentValue: 0,
-        value: ['left', 'center'],
+        value: ['左侧排列', '居中对齐'],
         isShow: true,
         type: 'position-editor',
         editComponent: markRaw(PositionEditor),
