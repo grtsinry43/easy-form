@@ -80,6 +80,7 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
           </template>
           <template #2>
             <div class="p-4 h-full overflow-auto">
+              {{store.components[store.currentMaterialComponent].value.position}}
               <EditPanel />
             </div>
           </template>

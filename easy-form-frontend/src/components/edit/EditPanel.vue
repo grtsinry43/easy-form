@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { useMaterialStore } from '@/stores/material-components.ts'
+import { provide } from 'vue'
 
 const store = useMaterialStore()
+
+const updateVal = (key: string, value?: string | number | boolean | object ) => {
+  console.log('updateVal', key, value)
+  store.updateComponentState(key, value)
+}
+provide('updateVal', updateVal)
 </script>
 
 <template>
@@ -24,6 +31,7 @@ const store = useMaterialStore()
           v-if="property.isShow"
           :is="property.editComponent"
           :value="property.value"
+          :configKey="key"
           :currentValue="property.currentValue"
         />
       </div>
