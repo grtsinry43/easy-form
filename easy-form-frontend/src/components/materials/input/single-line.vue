@@ -1,19 +1,50 @@
 <template>
-  <n-space vertical>
-    <n-h2> 单行文本输入</n-h2>
-    <n-p> 有些问题，要的是精炼的答案</n-p>
-    <n-input v-model:value="value" type="text" placeholder="在这里书写吧" />
-  </n-space>
+  <QuestionHeader
+    :serialNum="serialNum"
+    :title="computedState.title"
+    :desc="computedState.desc"
+    :titleSize="computedState.titleSize"
+    :descSize="computedState.descSize"
+    :titleWeight="computedState.titleWeight"
+    :descWeight="computedState.descWeight"
+    :titleItalic="computedState.titleItalic"
+    :descItalic="computedState.descItalic"
+    :titleColor="computedState.titleColor"
+    :descColor="computedState.descColor"
+  />
+  <n-input type="text" :placeholder="computedState.placeholder" clearable />
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
+import QuestionHeader from '@/components/materials/common/question-header.vue'
 
-export default defineComponent({
-  setup() {
-    return {
-      value: ref(null),
-    }
-  },
-})
+import {
+  getTextValue,
+  getStringValue,
+  getCurrentValue,
+  getStringValueByCurrentValue,
+} from '@/utils/get-value.ts'
+
+import type { SingleLineValue } from '@/configs/initialValue/single-line.ts'
+
+const props = defineProps<{
+  serialNum: number
+  value: SingleLineValue
+}>()
+
+const computedState = computed(() => ({
+  title: getTextValue(props.value.title),
+  desc: getTextValue(props.value.desc),
+  placeholder: getTextValue(props.value.placeholder),
+  position: getCurrentValue(props.value.position),
+  titleSize: getStringValueByCurrentValue(props.value.titleSize),
+  descSize: getStringValueByCurrentValue(props.value.descSize),
+  titleWeight: getCurrentValue(props.value.titleWeight),
+  descWeight: getCurrentValue(props.value.descWeight),
+  titleItalic: getCurrentValue(props.value.titleItalic),
+  descItalic: getCurrentValue(props.value.descItalic),
+  titleColor: getTextValue(props.value.titleColor),
+  descColor: getTextValue(props.value.descColor),
+}))
 </script>

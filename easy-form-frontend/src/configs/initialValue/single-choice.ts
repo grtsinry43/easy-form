@@ -12,7 +12,7 @@ import ColorEditor from '@/components/edit-items/color-editor.vue'
 import type { BaseComponentType, ComponentProperty } from '@/types/material.ts'
 import { useTheme } from '@/utils/theme.ts'
 
-export type SingleSelectValue = {
+export type SingleChoiceValue = {
   title: ComponentProperty & { value: string }
   desc: ComponentProperty & { value: string }
   options: ComponentProperty & { value: string[]; currentValue: number }
@@ -28,11 +28,11 @@ export type SingleSelectValue = {
 }
 
 export default function () {
-  const {resolvedTheme} = useTheme();
+  const { resolvedTheme } = useTheme()
   return {
     id: uuidV4(),
     component: markRaw(SingleChoice),
-    type: 'single-select',
+    type: 'single-choice',
     value: {
       title: {
         id: uuidV4(),
@@ -131,5 +131,5 @@ export default function () {
         editComponent: markRaw(PositionEditor),
       },
     },
-  } as BaseComponentType<SingleSelectValue>
+  } as BaseComponentType<SingleChoiceValue>
 }

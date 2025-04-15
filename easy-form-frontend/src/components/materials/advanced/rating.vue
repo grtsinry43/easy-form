@@ -1,16 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
+import QuestionHeader from '@/components/materials/common/question-header.vue'
 
-const rating = ref(0)
+import { getTextValue, getCurrentValue, getStringValueByCurrentValue } from '@/utils/get-value.ts'
+
+import type { RatingValue } from '@/configs/initialValue/rating.ts'
+
+const props = defineProps<{
+  serialNum: number
+  value: RatingValue
+}>()
+
+const computedState = computed(() => ({
+  title: getTextValue(props.value.title),
+  desc: getTextValue(props.value.desc),
+  max: getCurrentValue(props.value.max),
+  position: getCurrentValue(props.value.position),
+  titleSize: getStringValueByCurrentValue(props.value.titleSize),
+  descSize: getStringValueByCurrentValue(props.value.descSize),
+  titleWeight: getCurrentValue(props.value.titleWeight),
+  descWeight: getCurrentValue(props.value.descWeight),
+  titleItalic: getCurrentValue(props.value.titleItalic),
+  descItalic: getCurrentValue(props.value.descItalic),
+  titleColor: getTextValue(props.value.titleColor),
+  descColor: getTextValue(props.value.descColor),
+}))
 </script>
 
 <template>
-  <n-h2> 评分</n-h2>
-  <n-p> 来一起打个分数</n-p>
-  <n-space>
-    <n-rate v-model:value="rating" allow-half />
-    <div>{{ rating }}</div>
-  </n-space>
+  <QuestionHeader
+    :serialNum="serialNum"
+    :title="computedState.title"
+    :desc="computedState.desc"
+    :titleSize="computedState.titleSize"
+    :descSize="computedState.descSize"
+    :titleWeight="computedState.titleWeight"
+    :descWeight="computedState.descWeight"
+    :titleItalic="computedState.titleItalic"
+    :descItalic="computedState.descItalic"
+    :titleColor="computedState.titleColor"
+    :descColor="computedState.descColor"
+  />
+  <n-rate :count="computedState.max" />
 </template>
 
 <style scoped></style>

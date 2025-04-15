@@ -3,6 +3,7 @@ import componentTypes from '@/meta/component-meta.ts'
 import { useRouter, useRoute } from 'vue-router'
 import { useMaterialStore } from '@/stores/material-components.ts'
 import EditPanel from '@/components/edit/EditPanel.vue'
+import type { ComponentValueMap } from '@/configs/initialValue/initialValueMap.ts'
 
 const route = useRoute()
 
@@ -10,8 +11,8 @@ const router = useRouter()
 
 const store = useMaterialStore()
 
-const navigateToComponent = (typeId: string, buttonId: string) => {
-  router.push(`/components/${typeId}/${buttonId}`)
+const navigateToComponent = (typeId: string, buttonId: keyof ComponentValueMap) => {
+  router.push(`/components/${typeId}/${String(buttonId)}`)
 }
 </script>
 
@@ -43,10 +44,12 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
                     :type="
                       route.path === `/components/${type.id}/${btn.id}` ? 'primary' : 'default'
                     "
-                    @click="()=>{
-                      navigateToComponent(type.id, btn.id)
-                      store.setCurrentMaterialComponent(btn.id)
-                    }"
+                    @click="
+                      () => {
+                        navigateToComponent(type.id, btn.id as keyof ComponentValueMap)
+                        store.setCurrentMaterialComponent(btn.id as keyof ComponentValueMap)
+                      }
+                    "
                   >
                     {{ btn.text }}
                   </n-button>
@@ -73,9 +76,15 @@ const navigateToComponent = (typeId: string, buttonId: string) => {
                     <div
                       :class="{
                         'w-full':
+                          store.currentMaterialComponent &&
+                          store.components[store.currentMaterialComponent]?.value &&
+                          'position' in store.components[store.currentMaterialComponent].value &&
                           store.components[store.currentMaterialComponent].value.position
                             .currentValue === 0,
                         'mx-auto text-center':
+                          store.currentMaterialComponent &&
+                          store.components[store.currentMaterialComponent]?.value &&
+                          'position' in store.components[store.currentMaterialComponent].value &&
                           store.components[store.currentMaterialComponent].value.position
                             .currentValue === 1,
                       }"

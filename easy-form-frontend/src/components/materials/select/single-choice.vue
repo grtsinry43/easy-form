@@ -9,11 +9,11 @@ import {
   getStringValueByCurrentValue,
 } from '@/utils/get-value.ts'
 
-import type { SingleSelectValue } from '@/configs/initialValue/single-select.ts'
+import type { SingleChoiceValue } from '@/configs/initialValue/single-choice.ts'
 
 const props = defineProps<{
   serialNum: number
-  value: SingleSelectValue
+  value: SingleChoiceValue
 }>()
 
 const computedState = computed(() => ({

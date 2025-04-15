@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { initialValueMap } from '@/configs/initialValue/initialValueMap.ts'
 import type { BaseComponentType } from '@/types/material.ts'
 import type { ComponentValueMap } from '@/configs/initialValue/initialValueMap.ts'
+import type { Component } from 'vue'
 
 // 定义 MaterialStoreType，动态根据 ComponentValueMap 推断类型
 type MaterialStoreType = {
@@ -12,12 +13,31 @@ type MaterialStoreType = {
   }
 }
 
+// 定义组件值的类型
+type ComponentValue = {
+  id: string
+  value: string | number | string[] | number[]
+  currentValue?: number
+  isShow: boolean
+  type: string
+  editComponent: Component
+}
+
 export const useMaterialStore = defineStore('materialStore', {
   state: (): MaterialStoreType => ({
-    currentMaterialComponent: 'single-select', // 当前选中的组件
+    currentMaterialComponent: 'single-choice', // 当前选中的组件
     components: {
-      'single-select': initialValueMap['single-select'](),
-      // 如果有其他组件类型，在这里继续添加
+      'single-choice': initialValueMap['single-choice'](),
+      'single-line': initialValueMap['single-line'](),
+      'multi-line': initialValueMap['multi-line'](),
+      'text-remark': initialValueMap['text-remark'](),
+      'image-remark': initialValueMap['image-remark'](),
+      rating: initialValueMap['rating'](),
+      time: initialValueMap['time'](),
+      dropdown: initialValueMap['dropdown'](),
+      'multiple-choice': initialValueMap['multiple-choice'](),
+      'image-single': initialValueMap['image-single'](),
+      'image-multiple': initialValueMap['image-multiple'](),
     },
   }),
   actions: {
@@ -37,7 +57,7 @@ export const useMaterialStore = defineStore('materialStore', {
           // 使用类型断言确保 TypeScript 不会报错
           const componentValue = this.components[currentComponent].value as Record<
             string,
-            number | string | number[] | string[]
+            ComponentValue
           >
 
           // 根据属性类型判断如何更新
@@ -46,7 +66,7 @@ export const useMaterialStore = defineStore('materialStore', {
             componentValue[key].currentValue = value
           } else {
             // 否则直接更新 value
-            componentValue[key].value = value
+            componentValue[key].value = value as string | number | string[] | number[]
           }
         }
       }

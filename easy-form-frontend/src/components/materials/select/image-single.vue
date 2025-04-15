@@ -1,52 +1,67 @@
 <template>
-  <n-h2>图片单选题默认标题</n-h2>
-  <n-p>从下面的图片选项中选择一项</n-p>
-  <n-radio-group v-model:value="value" name="imageRadioGroup">
+  <QuestionHeader
+    :serialNum="serialNum"
+    :title="computedState.title"
+    :desc="computedState.desc"
+    :titleSize="computedState.titleSize"
+    :descSize="computedState.descSize"
+    :titleWeight="computedState.titleWeight"
+    :descWeight="computedState.descWeight"
+    :titleItalic="computedState.titleItalic"
+    :descItalic="computedState.descItalic"
+    :titleColor="computedState.titleColor"
+    :descColor="computedState.descColor"
+  />
+  <n-radio-group v-model:value="selectedValue" name="imageRadioGroup">
     <n-space horizontal>
       <n-card
-        v-for="option in options"
-        :key="option.value"
-        :class="{ 'selected-card': value === option.value }"
+        v-for="option in computedState.options"
+        :key="option"
+        :class="{ 'selected-card': selectedValue === option }"
         hoverable
-        @click="value = option.value"
+        @click="selectedValue = option"
         class="image-card"
       >
         <template #cover>
-          <img :src="option.imageUrl" alt="option.label" class="option-image" />
+          <img :src="option" alt="选项图片" class="option-image" />
         </template>
-        <n-radio class="mt-2" :value="option.value">{{ option.label }}</n-radio>
+        <n-radio class="mt-2" :value="option">{{ option }}</n-radio>
       </n-card>
     </n-space>
   </n-radio-group>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import QuestionHeader from '@/components/materials/common/question-header.vue'
+import {
+  getTextValue,
+  getCurrentValue,
+  getStringValueByCurrentValue,
+  getStringValue,
+} from '@/utils/get-value.ts'
+import type { ImageSingleValue } from '@/configs/initialValue/image-single.ts'
 
-export default defineComponent({
-  setup() {
-    return {
-      value: ref(null),
-      options: [
-        {
-          value: 'option1',
-          label: '选项1',
-          imageUrl: 'https://picsum.photos/200/100?random=1',
-        },
-        {
-          value: 'option2',
-          label: '选项2',
-          imageUrl: 'https://picsum.photos/200/100?random=2',
-        },
-        {
-          value: 'option3',
-          label: '选项3',
-          imageUrl: 'https://picsum.photos/200/100?random=3',
-        },
-      ],
-    }
-  },
-})
+const props = defineProps<{
+  serialNum: number
+  value: ImageSingleValue
+}>()
+
+const selectedValue = ref<string | null>(null)
+
+const computedState = computed(() => ({
+  title: getTextValue(props.value.title),
+  desc: getTextValue(props.value.desc),
+  options: getStringValue(props.value.options),
+  titleSize: getStringValueByCurrentValue(props.value.titleSize),
+  descSize: getStringValueByCurrentValue(props.value.descSize),
+  titleWeight: getCurrentValue(props.value.titleWeight),
+  descWeight: getCurrentValue(props.value.descWeight),
+  titleItalic: getCurrentValue(props.value.titleItalic),
+  descItalic: getCurrentValue(props.value.descItalic),
+  titleColor: getTextValue(props.value.titleColor),
+  descColor: getTextValue(props.value.descColor),
+}))
 </script>
 
 <style scoped>

@@ -1,23 +1,49 @@
 <template>
-  <n-space vertical>
-    <n-h2> 多行文本输入</n-h2>
-    <n-p> 而有些问题，等待你洋洋洒洒去书写</n-p>
-    <n-input
-      v-model:value="value"
-      type="textarea"
-      placeholder="在这里书写吧"
-    />
-  </n-space>
+  <QuestionHeader
+    :serialNum="serialNum"
+    :title="computedState.title"
+    :desc="computedState.desc"
+    :titleSize="computedState.titleSize"
+    :descSize="computedState.descSize"
+    :titleWeight="computedState.titleWeight"
+    :descWeight="computedState.descWeight"
+    :titleItalic="computedState.titleItalic"
+    :descItalic="computedState.descItalic"
+    :titleColor="computedState.titleColor"
+    :descColor="computedState.descColor"
+  />
+  <n-input
+    type="textarea"
+    :placeholder="computedState.placeholder"
+    :autosize="{ minRows: 3, maxRows: 5 }"
+  />
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue'
+import QuestionHeader from '@/components/materials/common/question-header.vue'
 
-export default defineComponent({
-  setup() {
-    return {
-      value: ref(null),
-    }
-  },
-})
+import { getTextValue, getCurrentValue, getStringValueByCurrentValue } from '@/utils/get-value.ts'
+
+import type { MultiLineValue } from '@/configs/initialValue/multi-line.ts'
+
+const props = defineProps<{
+  serialNum: number
+  value: MultiLineValue
+}>()
+
+const computedState = computed(() => ({
+  title: getTextValue(props.value.title),
+  desc: getTextValue(props.value.desc),
+  placeholder: getTextValue(props.value.placeholder),
+  position: getCurrentValue(props.value.position),
+  titleSize: getStringValueByCurrentValue(props.value.titleSize),
+  descSize: getStringValueByCurrentValue(props.value.descSize),
+  titleWeight: getCurrentValue(props.value.titleWeight),
+  descWeight: getCurrentValue(props.value.descWeight),
+  titleItalic: getCurrentValue(props.value.titleItalic),
+  descItalic: getCurrentValue(props.value.descItalic),
+  titleColor: getTextValue(props.value.titleColor),
+  descColor: getTextValue(props.value.descColor),
+}))
 </script>
