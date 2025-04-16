@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { Delete24Regular, DocumentEdit20Regular } from '@vicons/fluent'
+import { useRouter } from 'vue-router'
+
+const message = useMessage()
+const router = useRouter()
 </script>
 
 <template>
@@ -21,7 +25,18 @@ import { Delete24Regular, DocumentEdit20Regular } from '@vicons/fluent'
           <n-tag :bordered="false" type="info"> 哪里都是你</n-tag>
         </n-space>
         <n-space class="mt-4 flex" justify="end">
-          <n-button strong secondary circle type="info">
+          <n-button
+            strong
+            secondary
+            circle
+            type="info"
+            @click="
+              () => {
+                message.success('开始编辑，正在初始化编辑器')
+                router.push('/edit/1')
+              }
+            "
+          >
             <template #icon>
               <n-icon>
                 <DocumentEdit20Regular />

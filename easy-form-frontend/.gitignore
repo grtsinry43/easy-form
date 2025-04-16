@@ -17,7 +17,7 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
-# Editor directories and files
+# FormEditor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea

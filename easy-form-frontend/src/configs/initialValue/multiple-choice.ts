@@ -10,6 +10,7 @@ import ItalicEditor from '@/components/edit-items/italic-editor.vue'
 import ColorEditor from '@/components/edit-items/color-editor.vue'
 import type { BaseComponentType, ComponentProperty } from '@/types/material.ts'
 import { useTheme } from '@/utils/theme.ts'
+import PositionEditor from '@/components/edit-items/position-editor.vue'
 
 export type MultipleChoiceValue = {
   title: ComponentProperty & { value: string }
@@ -115,6 +116,14 @@ export default function () {
         isShow: true,
         type: 'options-editor',
         editComponent: markRaw(OptionsEditor),
+      },
+      position: {
+        id: uuidV4(),
+        currentValue: 0,
+        value: ['左侧排列', '居中对齐'],
+        isShow: true,
+        type: 'position-editor',
+        editComponent: markRaw(PositionEditor),
       },
     },
   } as BaseComponentType<MultipleChoiceValue>

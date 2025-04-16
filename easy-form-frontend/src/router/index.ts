@@ -36,6 +36,11 @@ const routes: RouteRecordRaw[] = [
     name: 'templates',
     component: () => import('../views/TemplateView.vue'),
   },
+  {
+    path: '/edit/:id',
+    name: 'edit',
+    component: () => import('../views/EditorView.vue'),
+  },
 ]
 
 componentTypes.value.forEach((type) => {
