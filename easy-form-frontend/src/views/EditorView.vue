@@ -3,8 +3,25 @@ import componentTypes from '@/meta/component-meta.ts'
 import { VueDraggable } from 'vue-draggable-plus'
 import { ArrowLeft } from '@vicons/carbon'
 import { useEditorStore } from '@/stores/editor.ts'
+import { NIcon } from 'naive-ui'
+import { ref } from 'vue'
+import { BookmarkOutline, ListOutline } from '@vicons/ionicons5'
 
 const store = useEditorStore()
+const curMenu = ref('items')
+
+const menuOptions = [
+  {
+    label: '项目',
+    key: 'items',
+    icon: ListOutline,
+  },
+  {
+    label: '大纲',
+    key: 'outline',
+    icon: BookmarkOutline,
+  },
+]
 </script>
 
 <template>
@@ -39,26 +56,68 @@ const store = useEditorStore()
       :max="0.35"
     >
       <template #1>
-        <nav class="p-4 h-full overflow-auto">
-          <n-collapse arrow-placement="right" :default-expanded-names="['select']">
-            <n-collapse-item v-for="type in componentTypes" :key="type.id" :name="type.id">
-              <template #header>
-                <n-icon class="mr-2">
-                  <component :is="type.icon" />
-                </n-icon>
-                <div>{{ type.title }}</div>
-              </template>
-              <template #default>
-                <n-flex v-if="type.buttons && type.buttons.length">
-                  <vue-draggable group="test" :sort="false" class="gap-4">
-                    <n-button v-for="btn in type.buttons" :key="btn.id">
-                      {{ btn.text }}
-                    </n-button>
-                  </vue-draggable>
-                </n-flex>
-              </template>
-            </n-collapse-item>
-          </n-collapse>
+        <nav class="h-full overflow-auto">
+          <n-layout has-sider class="h-full">
+            <n-layout-sider bordered :width="64">
+              <n-space vertical class="h-full">
+                <div
+                  v-for="option in menuOptions"
+                  :key="option.key"
+                  :class="{
+                    'bg-gray-200 dark:bg-gray-700': curMenu === option.key,
+                  }"
+                  class="flex flex-col p-2 h-16 w-full items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  @click="curMenu = option.key"
+                >
+                  <n-icon size="18">
+                    <component :is="option.icon" />
+                  </n-icon>
+                  <div class="text-[0.75rem]">{{ option.label }}</div>
+                </div>
+              </n-space>
+            </n-layout-sider>
+            <n-layout class="p-4">
+              <n-collapse
+                arrow-placement="right"
+                :default-expanded-names="['select']"
+                v-if="curMenu === 'items'"
+              >
+                <n-collapse-item v-for="type in componentTypes" :key="type.id" :name="type.id">
+                  <template #header>
+                    <n-icon class="mr-2">
+                      <component :is="type.icon" />
+                    </n-icon>
+                    <div>{{ type.title }}</div>
+                  </template>
+                  <template #default>
+                    <n-flex v-if="type.buttons && type.buttons.length">
+                      <vue-draggable group="test" :sort="false" class="flex flex-wrap">
+                        <div
+                          v-for="btn in type.buttons"
+                          :key="btn.id"
+                          class="border rounded-sm p-2 m-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-gray-300 dark:border-gray-600"
+                        >
+                          {{ btn.text }}
+                        </div>
+                      </vue-draggable>
+                    </n-flex>
+                  </template>
+                </n-collapse-item>
+              </n-collapse>
+              <span v-else>
+                <n-list class="bg-transparent" hoverable clickable>
+                  <n-list-item
+                    v-for="(item, index) in store.formData"
+                    :key="item.id"
+                    class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    @click="store.setCurrentEditComponentId(item.id)"
+                  >
+                    <div class="px-2">{{ index + 1 }}. {{ item.type || '未命名组件' }}</div>
+                  </n-list-item>
+                </n-list>
+              </span>
+            </n-layout>
+          </n-layout>
         </nav>
       </template>
       <template #2>
