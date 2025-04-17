@@ -14,6 +14,14 @@ const store = useMaterialStore()
 const navigateToComponent = (typeId: string, buttonId: keyof ComponentValueMap) => {
   router.push(`/components/${typeId}/${String(buttonId)}`)
 }
+
+import { provide } from 'vue'
+
+const updateVal = (key: string, value?: string | number | boolean | object) => {
+  console.log('updateVal', key, value)
+  store.updateComponentState(key, value)
+}
+provide('updateVal', updateVal)
 </script>
 
 <template>

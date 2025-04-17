@@ -1,22 +1,10 @@
 <script setup lang="ts">
 import componentTypes from '@/meta/component-meta.ts'
-import { useRouter, useRoute } from 'vue-router'
-import { useMaterialStore } from '@/stores/material-components.ts'
-import EditPanel from '@/components/edit/EditPanel.vue'
-import type { ComponentValueMap } from '@/configs/initialValue/initialValueMap.ts'
 import { VueDraggable } from 'vue-draggable-plus'
-import { ArrowLeft, Save } from '@vicons/carbon'
-import { CloudSyncRound } from '@vicons/material'
+import { ArrowLeft } from '@vicons/carbon'
+import { useEditorStore } from '@/stores/editor.ts'
 
-const route = useRoute()
-
-const router = useRouter()
-
-const store = useMaterialStore()
-
-const navigateToComponent = (typeId: string, buttonId: keyof ComponentValueMap) => {
-  router.push(`/components/${typeId}/${String(buttonId)}`)
-}
+const store = useEditorStore()
 </script>
 
 <template>
@@ -32,15 +20,9 @@ const navigateToComponent = (typeId: string, buttonId: keyof ComponentValueMap) 
         退出编辑
       </n-button>
       <n-space class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
-        <n-text> 表单名字，至少假装是的</n-text>
-        <!--<div>-->
-        <!--  <n-icon class="opacity-50" style="vertical-align: -1px">-->
-        <!--    <Save />-->
-        <!--  </n-icon>-->
-        <!--  <n-icon class="opacity-50" style="vertical-align: -1px">-->
-        <!--    <CloudSyncRound />-->
-        <!--  </n-icon>-->
-        <!--</div>-->
+        <n-text>
+          {{ store.formMeta.title.length === 0 ? '新建表单' : store.formMeta.title }}
+        </n-text>
       </n-space>
       <n-space>
         <n-button secondary> 保存表单</n-button>
@@ -68,7 +50,7 @@ const navigateToComponent = (typeId: string, buttonId: keyof ComponentValueMap) 
               </template>
               <template #default>
                 <n-flex v-if="type.buttons && type.buttons.length">
-                  <vue-draggable group="test">
+                  <vue-draggable group="test" :sort="false" class="gap-4">
                     <n-button v-for="btn in type.buttons" :key="btn.id">
                       {{ btn.text }}
                     </n-button>
@@ -89,14 +71,67 @@ const navigateToComponent = (typeId: string, buttonId: keyof ComponentValueMap) 
           :max="1"
         >
           <template #1>
-            <div class="p-8 h-full overflow-auto">
-              <vue-draggable group="test" class="flex flex-col gap-4 w-full h-full">
+            <n-scrollbar class="p-8 h-full">
+              <vue-draggable group="test" class="flex flex-col gap-1 w-full h-full p-1">
+                <n-card
+                  v-for="(item, index) in store.formData"
+                  :key="item.id"
+                  class="mb-4 rounded-md hover:border-green-700 relative transition"
+                  hoverable
+                  @click="store.setCurrentEditComponentId(item.id)"
+                  :style="{
+                    borderColor: store.currentEditComponentId === item.id ? '#3b82f6' : '',
+                  }"
+                >
+                  <!-- 添加 n-badge -->
+                  <n-badge
+                    v-if="store.currentEditComponentId === item.id"
+                    value="当前编辑"
+                    type="info"
+                    processing
+                    class="absolute top-2 right-2"
+                  />
+                  <component
+                    :is="item.component"
+                    v-bind="item"
+                    :serialNum="index + 1"
+                    :store="item.value"
+                    :key="item.id"
+                  />
+                </n-card>
               </vue-draggable>
-            </div>
+            </n-scrollbar>
           </template>
           <template #2>
             <n-scrollbar class="p-4 h-full overflow-auto">
-              <EditPanel />
+              <div>
+                <div v-if="store.getComponentById(store.currentEditComponentId)">
+                  <div
+                    v-for="[key, property] in Object.entries(
+                      store.getComponentById(store.currentEditComponentId).value,
+                    )"
+                    :key="key"
+                    :class="{
+                      'inline-block mb-2 mr-2': [
+                        'weight-editor',
+                        'italic-editor',
+                        'color-editor',
+                      ].includes(property.type),
+                    }"
+                  >
+                    <component
+                      v-if="property.isShow"
+                      :is="property.editComponent"
+                      :value="property.value"
+                      :configKey="key"
+                      :currentValue="property.currentValue"
+                    />
+                  </div>
+                </div>
+                <div v-else class="flex justify-center items-center w-full h-full">
+                  <div class="opacity-60">在左侧显示组件，开始编辑叭</div>
+                </div>
+              </div>
             </n-scrollbar>
           </template>
         </n-split>
