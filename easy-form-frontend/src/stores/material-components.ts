@@ -14,7 +14,7 @@ type MaterialStoreType = {
 }
 
 // 定义组件值的类型
-type ComponentValue = {
+export type ComponentValue = {
   id: string
   value: string | number | string[] | number[]
   currentValue?: number

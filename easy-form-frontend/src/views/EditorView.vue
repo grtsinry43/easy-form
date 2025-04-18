@@ -4,11 +4,15 @@ import { VueDraggable } from 'vue-draggable-plus'
 import { ArrowLeft } from '@vicons/carbon'
 import { useEditorStore } from '@/stores/editor.ts'
 import { NIcon } from 'naive-ui'
-import { ref } from 'vue'
+import { provide, ref } from 'vue'
 import { BookmarkOutline, ListOutline } from '@vicons/ionicons5'
 
 const store = useEditorStore()
 const curMenu = ref('items')
+
+provide('updateVal', (configKey, value) => {
+  store.updateComponentInFormData(configKey, value)
+})
 
 const menuOptions = [
   {
@@ -112,7 +116,7 @@ const menuOptions = [
                     class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     @click="store.setCurrentEditComponentId(item.id)"
                   >
-                    <div class="px-2">{{ index + 1 }}. {{ item.type || '未命名组件' }}</div>
+                    <div class="px-2">{{ index + 1 }}. {{ item.value.title.value || '未命名组件' }}</div>
                   </n-list-item>
                 </n-list>
               </span>
@@ -154,7 +158,7 @@ const menuOptions = [
                     :is="item.component"
                     v-bind="item"
                     :serialNum="index + 1"
-                    :store="item.value"
+                    :value="item.value"
                     :key="item.id"
                   />
                 </n-card>

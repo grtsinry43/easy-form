@@ -1,6 +1,7 @@
 // 当前的编辑器表单实时状态仓库
 import { defineStore } from 'pinia'
 import { initialValueMap } from '@/configs/initialValue/initialValueMap.ts'
+import type { ComponentValue } from '@/stores/material-components.ts'
 
 export const useEditorStore = defineStore('editorStore', {
   state: () => ({
@@ -41,10 +42,29 @@ export const useEditorStore = defineStore('editorStore', {
       this.formData.push(component)
     },
     // 更新组件在表单数据中的状态
-    updateComponentInFormData(id, updatedComponent) {
-      const index = this.formData.findIndex((component) => component.id === id)
-      if (index !== -1) {
-        this.formData[index] = { ...this.formData[index], ...updatedComponent }
+    updateComponentInFormData(configKey: string, newVal: string | number | string[] | number[]) {
+      console.log('updateComponentInFormData', configKey, newVal)
+      const component = this.formData.find(
+        (component) => component.id === this.currentEditComponentId,
+      )
+      console.log('component', component)
+      if (!component) return
+      // 检查 key 是否存在于当前组件的 value 中
+      if (configKey in component.value) {
+        // 如果 value 是基础类型，直接更新值
+        if (typeof newVal !== 'undefined') {
+          // 使用类型断言确保 TypeScript 不会报错
+          const componentValue = component.value as Record<string, ComponentValue>
+
+          // 根据属性类型判断如何更新
+          if ('currentValue' in componentValue[configKey] && typeof newVal === 'number') {
+            // 如果属性有 currentValue 并且传入的是数字，更新 currentValue
+            componentValue[configKey].currentValue = newVal
+          } else {
+            // 否则直接更新 value
+            componentValue[configKey].value = newVal as string | number | string[] | number[]
+          }
+        }
       }
     },
     // 删除组件从表单数据

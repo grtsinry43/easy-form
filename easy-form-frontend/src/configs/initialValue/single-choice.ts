@@ -74,7 +74,7 @@ export default function () {
       },
       desc: {
         id: uuidV4(),
-        value: '单选题默认描述',
+        value: '最平常的一种题型，是它们组成了许多问卷',
         isShow: true,
         type: 'desc-editor',
         editComponent: markRaw(DescEditor),
