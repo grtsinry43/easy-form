@@ -31,6 +31,7 @@ export const useEditorStore = defineStore('editorStore', {
   actions: {
     // 设置当前正在编辑的组件 ID
     setCurrentEditComponentId(id) {
+      console.log('setCurrentEditComponentId', id)
       this.currentEditComponentId = id
     },
     // 设置表单元数据
@@ -71,13 +72,38 @@ export const useEditorStore = defineStore('editorStore', {
     removeComponentFromFormData(id) {
       this.formData = this.formData.filter((component) => component.id !== id)
     },
-    // 重新排序表单数据
-    reorderFormData(newOrder) {
-      this.formData = newOrder.map((id) => this.formData.find((component) => component.id === id))
-    },
     // 通过 ID 获取组件
     getComponentById(id) {
       return this.formData.find((component) => component.id === id)
+    },
+    // 重新排序表单数据
+    reorderFormDataByIndex(oldIndex: number, newIndex: number) {
+      if (
+        oldIndex < 0 ||
+        oldIndex >= this.formData.length ||
+        newIndex < 0 ||
+        newIndex >= this.formData.length
+      ) {
+        console.error('索引超出范围')
+        return
+      }
+
+      // 从数组中移除旧位置的元素
+      const [movedItem] = this.formData.splice(oldIndex, 1)
+
+      // 在新位置插入该元素
+      this.formData.splice(newIndex, 0, movedItem)
+
+      console.log('重新排序后的表单数据', this.formData)
+    },
+
+    // 在指定索引位置添加新组件
+    addComponentAtIndex(newIndex: number, name: string) {
+      if (newIndex < 0 || newIndex > this.formData.length) {
+        console.error('索引超出范围')
+        return
+      }
+      this.formData.splice(newIndex, 0, initialValueMap[name]())
     },
   },
 })

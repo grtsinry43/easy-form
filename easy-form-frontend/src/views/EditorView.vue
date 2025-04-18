@@ -7,11 +7,13 @@ import { NIcon } from 'naive-ui'
 import { provide, ref } from 'vue'
 import { BookmarkOutline, ListOutline } from '@vicons/ionicons5'
 
+const draggableKey = ref(0) // 创建一个响应式 key
+
 const store = useEditorStore()
 const curMenu = ref('items')
 
-provide('updateVal', (configKey, value) => {
-  store.updateComponentInFormData(configKey, value)
+provide('updateVal', (configKey: string, newVal: string | number | string[] | number[]) => {
+  store.updateComponentInFormData(configKey, newVal)
 })
 
 const menuOptions = [
@@ -26,6 +28,25 @@ const menuOptions = [
     icon: BookmarkOutline,
   },
 ]
+
+// 自定义排序处理逻辑
+const handleSort = (event): void => {
+  console.log(event)
+  const { oldIndex, newIndex } = event
+  console.log('排序:', oldIndex, newIndex)
+  store.reorderFormDataByIndex(oldIndex, newIndex)
+  console.log('排序完成:', store.formData)
+  // 更新 draggableKey 以触发重新渲染
+  draggableKey.value += 1
+}
+
+// 自定义拖入处理逻辑
+const handleAdd = (event) => {
+  console.log('拖入事件:', event)
+  const { newIndex, data } = event
+  store.addComponentAtIndex(newIndex, data.id)
+  console.log('拖入完成:', store.formData)
+}
 </script>
 
 <template>
@@ -95,7 +116,12 @@ const menuOptions = [
                   </template>
                   <template #default>
                     <n-flex v-if="type.buttons && type.buttons.length">
-                      <vue-draggable group="test" :sort="false" class="flex flex-wrap">
+                      <vue-draggable
+                        :group="{ name: 'test', pull: 'clone', put: false }"
+                        :sort="false"
+                        class="flex flex-wrap"
+                        :model-value="type.buttons"
+                      >
                         <div
                           v-for="btn in type.buttons"
                           :key="btn.id"
@@ -108,7 +134,7 @@ const menuOptions = [
                   </template>
                 </n-collapse-item>
               </n-collapse>
-              <span v-else>
+              <div v-else>
                 <n-list class="bg-transparent" hoverable clickable>
                   <n-list-item
                     v-for="(item, index) in store.formData"
@@ -116,10 +142,12 @@ const menuOptions = [
                     class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     @click="store.setCurrentEditComponentId(item.id)"
                   >
-                    <div class="px-2">{{ index + 1 }}. {{ item.value.title.value || '未命名组件' }}</div>
+                    <div class="px-2">
+                      {{ index + 1 }}. {{ item.value.title.value || '未命名组件' }}
+                    </div>
                   </n-list-item>
                 </n-list>
-              </span>
+              </div>
             </n-layout>
           </n-layout>
         </nav>
@@ -135,7 +163,14 @@ const menuOptions = [
         >
           <template #1>
             <n-scrollbar class="p-8 h-full">
-              <vue-draggable group="test" class="flex flex-col gap-1 w-full h-full p-1">
+              <vue-draggable
+                :group="{ name: 'test', pull: false, put: true }"
+                class="flex flex-col gap-1 w-full h-full p-1"
+                :model-value="store.formData"
+                @add="handleAdd"
+                @update="handleSort"
+                :key="draggableKey"
+              >
                 <n-card
                   v-for="(item, index) in store.formData"
                   :key="item.id"
@@ -156,7 +191,6 @@ const menuOptions = [
                   />
                   <component
                     :is="item.component"
-                    v-bind="item"
                     :serialNum="index + 1"
                     :value="item.value"
                     :key="item.id"
@@ -171,7 +205,7 @@ const menuOptions = [
                 <div v-if="store.getComponentById(store.currentEditComponentId)">
                   <div
                     v-for="[key, property] in Object.entries(
-                      store.getComponentById(store.currentEditComponentId).value,
+                      store.getComponentById(store.currentEditComponentId)?.value || {},
                     )"
                     :key="key"
                     :class="{
@@ -199,26 +233,6 @@ const menuOptions = [
           </template>
         </n-split>
       </template>
-      <!--<template #resize-trigger>-->
-      <!--  &lt;!&ndash;<div class="bg-gray-300 dark:bg-gray-600 hover:bg-blue-500 w-1 h-full transition-all"></div>&ndash;&gt;-->
-      <!--</template>-->
     </n-split>
   </div>
 </template>
-
-<style>
-.nested-transition-enter-active,
-.nested-transition-leave-active {
-  transition: all 0.2s ease;
-}
-
-.nested-transition-enter-from {
-  opacity: 0;
-  transform: translateX(10px);
-}
-
-.nested-transition-leave-to {
-  opacity: 0;
-  transform: translateX(-10px);
-}
-</style>

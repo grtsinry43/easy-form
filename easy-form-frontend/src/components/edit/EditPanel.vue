@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMaterialStore } from '@/stores/material-components.ts'
-const store = useMaterialStore()
 
+const store = useMaterialStore()
 </script>
 
 <template>
@@ -13,11 +13,9 @@ const store = useMaterialStore()
         )"
         :key="key"
         :class="{
-          'inline-block mb-2 mr-2': [
-            'weight-editor',
-            'italic-editor',
-            'color-editor',
-          ].includes(property.type),
+          'inline-block mb-2 mr-2': ['weight-editor', 'italic-editor', 'color-editor'].includes(
+            property.type,
+          ),
         }"
       >
         <component
