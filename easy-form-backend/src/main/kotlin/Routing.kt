@@ -26,8 +26,8 @@ import org.jetbrains.exposed.sql.*
 
 fun Application.configureRouting() {
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
+//        get("/") {
+//            call.respondText("Hello World!")
+//        }
     }
 }

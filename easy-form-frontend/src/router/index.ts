@@ -1,13 +1,18 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import OfficialView from '@/views/OfficialView.vue'
 
 import componentTypes from '@/meta/component-meta.ts'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
+    name: 'index',
+    component: OfficialView,
+  },
+  {
+    path: '/home',
     name: 'home',
-    component: HomeView,
+    component: () => import('../views/HomeView.vue'),
   },
   {
     path: '/about',
@@ -40,6 +45,11 @@ const routes: RouteRecordRaw[] = [
     path: '/edit/:id',
     name: 'edit',
     component: () => import('../views/EditorView.vue'),
+  },
+  {
+    path: '/form/:id',
+    name: 'form',
+    component: () => import('../views/FormView.vue'),
   },
 ]
 

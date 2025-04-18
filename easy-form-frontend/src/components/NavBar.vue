@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full bg-gray-50/70 dark:bg-black/70 backdrop-blur-md shadow-sm border-b border-gray-200 fixed top-0 z-20"
+    class="w-full bg-gray-50/70 dark:bg-black/70 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-800 fixed top-0 z-20"
   >
     <div class="mx-auto px-4">
       <div class="flex items-center justify-between h-16">
@@ -129,6 +129,50 @@
       </div>
     </div>
   </div>
+  <!-- Header with theme toggle -->
+  <!--<header-->
+  <!--  class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-[#ebedf0] dark:border-[#303030]"-->
+  <!--&gt;-->
+  <!--  <div class="container mx-auto px-4 py-3 flex items-center justify-between">-->
+  <!--    <div class="flex items-center space-x-2">-->
+  <!--      <div-->
+  <!--        class="text-xl font-bold bg-gradient-to-r from-[#18a058] to-[#36ad6a] bg-clip-text text-transparent"-->
+  <!--      >-->
+  <!--        EasyForm-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="flex items-center space-x-6">-->
+  <!--      <nav class="hidden md:flex items-center space-x-6">-->
+  <!--        <a-->
+  <!--          href="#features"-->
+  <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
+  <!--        >-->
+  <!--          功能-->
+  <!--        </a>-->
+  <!--        <a-->
+  <!--          href="#testimonials"-->
+  <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
+  <!--        >-->
+  <!--          用户反馈-->
+  <!--        </a>-->
+  <!--        <a-->
+  <!--          href="#pricing"-->
+  <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
+  <!--        >-->
+  <!--          定价-->
+  <!--        </a>-->
+  <!--      </nav>-->
+  <!--      <n-button quaternary circle @click="toggleTheme">-->
+  <!--        <template #icon>-->
+  <!--          <n-icon size="18">-->
+  <!--            <sun-icon v-if="isDark" />-->
+  <!--            <moon-icon v-else />-->
+  <!--          </n-icon>-->
+  <!--        </template>-->
+  <!--      </n-button>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <!--</header>-->
 </template>
 
 <script setup lang="ts">
