@@ -65,6 +65,7 @@ class UserService(database: Database) {
             it[nickname] = user.nickname
             it[email] = user.email
             it[oauthProvider] = user.oauthProvider
+            it[oauthId] = user.oauthId
         }[Users.id]
     }
 

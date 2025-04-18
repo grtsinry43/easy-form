@@ -1,4 +1,4 @@
-package com.grtsinry43
+package com.grtsinry43.config
 
 // 导入必要的库
 import com.auth0.jwt.JWT
@@ -46,7 +46,7 @@ fun Application.configureSecurity() {
     val jwtUtils: JwtUtils by inject()
     // --- 配置加载 ---
     val jwtAudience = environment.config.property("jwt.audience").getString()
-    val jwtDomain = environment.config.property("jwt.domain").getString()
+    val jwtIssuer = environment.config.property("jwt.issuer").getString()
     val jwtRealm = environment.config.property("jwt.realm").getString()
     val jwtSecret = environment.config.property("jwt.secret").getString()
     val googleClientId = environment.config.property("oauth.google.clientId").getString()
@@ -72,13 +72,17 @@ fun Application.configureSecurity() {
             verifier(
                 JWT.require(Algorithm.HMAC256(jwtSecret))
                     .withAudience(jwtAudience)
-                    .withIssuer(jwtDomain)
+                    .withIssuer(jwtIssuer)
                     .build()
             )
             validate { credential ->
-                if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
+                credential.payload.getClaim("userId").asString()
+                    .takeIf { it.isNotEmpty() }
+                    ?.toInt()
+                    ?.let { userService.read(it) }
+                    ?.let { JWTPrincipal(credential.payload) }
             }
-            challenge { defaultScheme, realm ->
+            challenge { _, _ ->
                 call.respond(HttpStatusCode.Unauthorized, "令牌无效或已过期")
             }
         }
@@ -138,6 +142,7 @@ fun Application.configureSecurity() {
                                     username = userInfo.name ?: userInfo.email,
                                     nickname = userInfo.name ?: "",
                                     oauthProvider = "google",
+                                    oauthId = userInfo.id
                                 )
                             ).let { userId ->
                                 log.info("新用户注册成功，ID: $userId")

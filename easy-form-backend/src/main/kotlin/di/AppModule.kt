@@ -7,9 +7,27 @@ package com.grtsinry43.di
  */
 import com.grtsinry43.services.UserService
 import com.grtsinry43.utils.JwtUtils
+import io.ktor.server.application.*
+import org.jetbrains.exposed.sql.Database
 import org.koin.dsl.module
 
-val appModule = module {
-    single { UserService(get()) } // 假设 UserService 需要一个数据库实例
-    single { JwtUtils(get()) } // 假设 JwtUtils 需要一个密钥
+val databaseModule = module {
+    single { (environment: ApplicationEnvironment) -> 
+        Database.connect(
+            url = environment.config.property("postgres.url").getString(),
+            user = environment.config.property("postgres.user").getString(),
+            driver = "org.postgresql.Driver",
+            password = environment.config.property("postgres.password").getString()
+        )
+    }
+}
+
+val serviceModule = module {
+    single { UserService(get()) }
+}
+
+val utilsModule = module {
+    single { (environment: ApplicationEnvironment) ->
+        JwtUtils(environment.config) 
+    }
 }

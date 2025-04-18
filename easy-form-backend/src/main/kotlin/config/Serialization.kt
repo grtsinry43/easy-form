@@ -1,4 +1,4 @@
-package com.grtsinry43
+package com.grtsinry43.config
 
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*

@@ -11,4 +11,5 @@ data class OAuthRegisterRequest(
     val nickname: String,
     val email: String,
     val oauthProvider: String,
+    val oauthId: String
 )

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { HelpCircle } from 'lucide-vue-next'
 
 import { GoogleOutlined, AppleFilled, GithubFilled } from '@vicons/antd'
@@ -8,15 +8,36 @@ import { ArrowCircleRight28Regular } from '@vicons/fluent'
 
 const email = ref('')
 const showGooglePopup = ref(false)
+const typedText = ref('')
+const fullText = '即刻开始便捷美观的表单体验。'
+const typingSpeed = 50 // 打字速度 (ms)
+
+// 实现打字效果的函数
+onMounted(() => {
+  let index = 0
+  const typeNextChar = () => {
+    if (index < fullText.length) {
+      typedText.value = fullText.substring(0, index) + '_'
+      index++
+      setTimeout(typeNextChar, typingSpeed)
+    } else {
+      typedText.value = fullText // 完成打字后去掉下划线
+    }
+  }
+
+  typeNextChar()
+})
 </script>
 
 <template>
-  <div class="h-full justify-center items-center bg-white flex flex-col">
+  <div class="h-full justify-center items-center flex flex-col">
     <div class="w-full max-w-md px-4 mt-16">
       <!-- Login Form -->
       <div class="text-center mb-8">
-        <h1 class="text-2xl font-medium text-gray-800 mb-2">即刻开始便捷美观的表单体验。</h1>
-        <p class="text-gray-500">登录到 EasyForm 平台</p>
+        <h1 class="text-2xl font-medium text-gray-800 dark:text-gray-100 mb-2">
+          {{ typedText }}
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400">登录到 EasyForm 平台</p>
       </div>
 
       <!-- Social Login Buttons with Left-aligned Icons -->
@@ -43,32 +64,34 @@ const showGooglePopup = ref(false)
           </div>
         </n-button>
 
-        <n-button class="w-full custom-login-btn" type="default">
-          <div class="flex items-center w-full">
-            <div class="flex-none ml-2">
-              <n-icon size="14">
-                <AppleFilled />
-              </n-icon>
-            </div>
-            <div class="flex-grow text-center">通过 Apple 登录</div>
-          </div>
-        </n-button>
+        <!--<n-button class="w-full custom-login-btn" type="default">-->
+        <!--  <div class="flex items-center w-full">-->
+        <!--    <div class="flex-none ml-2">-->
+        <!--      <n-icon size="14">-->
+        <!--        <AppleFilled />-->
+        <!--      </n-icon>-->
+        <!--    </div>-->
+        <!--    <div class="flex-grow text-center"> 通过 Apple 登录 </div>-->
+        <!--  </div>-->
+        <!--</n-button>-->
 
-        <n-button class="w-full custom-login-btn" type="default">
-          <div class="flex items-center w-full">
-            <div class="flex-none ml-2">
-              <n-icon size="14">
-                <LogoMicrosoft />
-              </n-icon>
-            </div>
-            <div class="flex-grow text-center">通过 Microsoft 登录</div>
-          </div>
-        </n-button>
+        <!--<n-button class="w-full custom-login-btn" type="default">-->
+        <!--  <div class="flex items-center w-full">-->
+        <!--    <div class="flex-none ml-2">-->
+        <!--      <n-icon size="14">-->
+        <!--        <LogoMicrosoft />-->
+        <!--      </n-icon>-->
+        <!--    </div>-->
+        <!--    <div class="flex-grow text-center"> 通过 Microsoft 登录 </div>-->
+        <!--  </div>-->
+        <!--</n-button>-->
       </div>
 
       <!-- Email Input -->
       <div class="mb-4">
-        <div class="text-sm text-gray-600 mb-1">当然，你也可以通过邮件地址继续</div>
+        <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">
+          当然，你也可以通过邮件地址继续
+        </div>
         <n-input v-model:value="email" placeholder="输入你的邮件地址..." class="rounded-md">
           <template #suffix>
             <n-icon>
@@ -82,11 +105,11 @@ const showGooglePopup = ref(false)
       <n-button type="primary" block class="mb-6" :disabled="!email"> 继续</n-button>
 
       <!-- Terms -->
-      <div class="text-xs text-gray-500 text-center">
+      <div class="text-xs text-gray-500 dark:text-gray-400 text-center">
         你的昵称和头像会显示给受邀填写表单的 <br />
         用户。继续操作即表示，你已确认理解并 <br />
-        同意此 <a href="#" class="text-gray-500 underline"> 条款和条件 </a> 和
-        <a href="#" class="text-gray-500 underline"> 隐私政策 </a>。
+        同意此 <a href="#" class="text-gray-500 dark:text-gray-400 underline"> 条款和条件 </a> 和
+        <a href="#" class="text-gray-500 dark:text-gray-400 underline"> 隐私政策 </a>。
       </div>
     </div>
 
@@ -112,7 +135,7 @@ const showGooglePopup = ref(false)
 
       <div class="py-4">
         <div class="text-lg font-medium mb-2">使用您的 Google 账号登录 Notion</div>
-        <div class="text-sm text-gray-600 mb-6">
+        <div class="text-sm text-gray-600 dark:text-gray-400 mb-6">
           不再需要记住密码，享受快速、简单、安全的登录体验。
         </div>
 
