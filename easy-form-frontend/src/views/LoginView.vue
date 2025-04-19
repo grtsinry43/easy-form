@@ -7,7 +7,6 @@ import { LogoMicrosoft } from '@vicons/ionicons5'
 import { ArrowCircleRight28Regular } from '@vicons/fluent'
 
 const email = ref('')
-const showGooglePopup = ref(false)
 const typedText = ref('')
 const fullText = '即刻开始便捷美观的表单体验。'
 const typingSpeed = 50 // 打字速度 (ms)
@@ -27,6 +26,11 @@ onMounted(() => {
 
   typeNextChar()
 })
+
+function handleGoogleLogin() {
+  // 使用 window.location 来进行跳转
+  window.location.href = 'http://localhost:8080/login-google'
+}
 </script>
 
 <template>
@@ -42,7 +46,7 @@ onMounted(() => {
 
       <!-- Social Login Buttons with Left-aligned Icons -->
       <div class="space-y-3 mb-4">
-        <n-button class="w-full custom-login-btn" type="default" @click="showGooglePopup = true">
+        <n-button class="w-full custom-login-btn" type="default" @click="handleGoogleLogin">
           <div class="flex items-center w-full">
             <div class="flex-none ml-2">
               <n-icon size="14">
@@ -112,36 +116,6 @@ onMounted(() => {
         <a href="#" class="text-gray-500 dark:text-gray-400 underline"> 隐私政策 </a>。
       </div>
     </div>
-
-    <!-- Google Login Popup -->
-    <n-modal
-      v-model:show="showGooglePopup"
-      preset="card"
-      style="width: 400px"
-      :mask-closable="true"
-      :close-on-esc="true"
-    >
-      <template #header>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <img
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
-              class="w-5 h-5 mr-2"
-            />
-            <span> 使用 Google 账号登录 </span>
-          </div>
-        </div>
-      </template>
-
-      <div class="py-4">
-        <div class="text-lg font-medium mb-2">使用您的 Google 账号登录 Notion</div>
-        <div class="text-sm text-gray-600 dark:text-gray-400 mb-6">
-          不再需要记住密码，享受快速、简单、安全的登录体验。
-        </div>
-
-        <n-button type="primary" block> 继续</n-button>
-      </div>
-    </n-modal>
 
     <!-- Help Button -->
     <div class="fixed bottom-4 right-4">

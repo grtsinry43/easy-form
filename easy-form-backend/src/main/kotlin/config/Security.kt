@@ -3,6 +3,8 @@ package com.grtsinry43.config
 // 导入必要的库
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.grtsinry43.common.ApiResponse
+import com.grtsinry43.common.ErrorCode
 import com.grtsinry43.dto.OAuthRegisterRequest
 import com.grtsinry43.services.UserService
 import com.grtsinry43.utils.JwtUtils
@@ -83,7 +85,7 @@ fun Application.configureSecurity() {
                     ?.let { JWTPrincipal(credential.payload) }
             }
             challenge { _, _ ->
-                call.respond(HttpStatusCode.Unauthorized, "令牌无效或已过期")
+                call.respond(HttpStatusCode.Unauthorized, ApiResponse.error(ErrorCode.UNAUTHORIZED))
             }
         }
 
@@ -118,20 +120,23 @@ fun Application.configureSecurity() {
 
                 if (principal != null) {
                     val accessToken = principal.accessToken
-                    log.info("成功从 Google 获取 Access Token (在回调路由中)。")
                     try {
                         // 手动请求用户信息
-                        log.info("在回调路由中请求 Google UserInfo Endpoint...")
                         val userInfo: GoogleUserInfo = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
                             headers { append(HttpHeaders.Authorization, "Bearer $accessToken") }
                         }.body()
-                        log.info("在回调路由中成功获取用户信息: Email=${userInfo.email}")
+                        log.info("OAUTH2 | 在回调路由中成功获取用户信息: Email=${userInfo.email}")
 
                         userService.getUserByOauthProviderAndId("google", userInfo.id)?.let { user ->
                             // 用户已存在，装载即可
                             jwtUtils.apply {
                                 val token = createToken(user.id)
                                 call.response.headers.append(HttpHeaders.Authorization, token)
+                                call.response.cookies.append(
+                                    "token", token,
+                                    path = "/",
+                                    maxAge = 60 * 60 * 24 * 7, // 一周
+                                )
                             }
                         } ?: run {
                             // 用户不存在，创建新用户
@@ -149,12 +154,19 @@ fun Application.configureSecurity() {
                                 jwtUtils.apply {
                                     val token = createToken(userId.toString())
                                     call.response.headers.append(HttpHeaders.Authorization, token)
+                                    call.response.cookies.append(
+                                        "token", token,
+                                        path = "/",
+                                        maxAge = 60 * 60 * 24 * 7, // 一周
+                                    )
                                 }
                             }
                         }
 
                         // 直接响应
-                        call.respondText("你好, ${userInfo.name ?: userInfo.email}! 你的邮箱是 ${userInfo.email}。 头像: ${userInfo.picture ?: "未提供"}")
+//                        call.respondText("你好, ${userInfo.name ?: userInfo.email}! 你的邮箱是 ${userInfo.email}。 头像: ${userInfo.picture ?: "未提供"}")
+                        call.respondRedirect("http://localhost:5173/home", false) // 重定向到前端页面
+                        return@get
 
                     } catch (e: Exception) {
                         log.error("在回调路由中获取 Google 用户信息失败: ${e.message}", e)

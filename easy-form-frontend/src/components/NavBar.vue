@@ -68,8 +68,15 @@
                 <BellIcon />
               </template>
             </n-button>
-            <n-button type="primary" class="px-3 py-2"> 登录</n-button>
-            <n-dropdown :options="userOptions" @select="handleSelect">
+            <n-button
+              type="primary"
+              class="px-3 py-2"
+              v-if="user.isLogin == false"
+              @click="router.push('/login')"
+            >
+              登录
+            </n-button>
+            <n-dropdown :options="userOptions" @select="handleSelect" v-else>
               <n-avatar round size="small" :src="userAvatar">
                 {{ !userAvatar ? 'U' : '' }}
               </n-avatar>
@@ -147,19 +154,19 @@
   <!--          href="#features"-->
   <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
   <!--        >-->
-  <!--          功能-->
+  <!--          功能 -->
   <!--        </a>-->
   <!--        <a-->
   <!--          href="#testimonials"-->
   <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
   <!--        >-->
-  <!--          用户反馈-->
+  <!--          用户反馈 -->
   <!--        </a>-->
   <!--        <a-->
   <!--          href="#pricing"-->
   <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
   <!--        >-->
-  <!--          定价-->
+  <!--          定价 -->
   <!--        </a>-->
   <!--      </nav>-->
   <!--      <n-button quaternary circle @click="toggleTheme">-->
@@ -190,6 +197,9 @@ import {
   MoonIcon,
 } from 'lucide-vue-next'
 import { useTheme } from '@/utils/theme.ts'
+import { useUserStore } from '@/stores/user.ts'
+import { useRouter } from 'vue-router'
+import { getUserInfo } from '@/api/user.ts'
 
 const mobileMenuOpen = ref(false)
 const userAvatar = ref('')
@@ -200,7 +210,17 @@ const toggleTheme = () => {
   setTheme(resolvedTheme.value === 'light' ? 'dark' : 'light')
 }
 
-onMounted(() => {})
+const user = useUserStore()
+
+const router = useRouter()
+
+onMounted(async () => {
+  const userInfo = await getUserInfo()
+  if (userInfo) {
+    user.setUserInfo(userInfo)
+    user.setLogin(true)
+  }
+})
 
 const userOptions = [
   {

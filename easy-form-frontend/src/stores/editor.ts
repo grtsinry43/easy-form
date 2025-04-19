@@ -38,10 +38,6 @@ export const useEditorStore = defineStore('editorStore', {
     setFormMeta(meta) {
       this.formMeta = { ...this.formMeta, ...meta }
     },
-    // 添加组件到表单数据
-    addComponentToFormData(component) {
-      this.formData.push(component)
-    },
     // 更新组件在表单数据中的状态
     updateComponentInFormData(configKey: string, newVal: string | number | string[] | number[]) {
       console.log('updateComponentInFormData', configKey, newVal)
@@ -73,7 +69,7 @@ export const useEditorStore = defineStore('editorStore', {
       this.formData = this.formData.filter((component) => component.id !== id)
     },
     // 通过 ID 获取组件
-    getComponentById(id) {
+    getComponentById(id: string) {
       return this.formData.find((component) => component.id === id)
     },
     // 重新排序表单数据
