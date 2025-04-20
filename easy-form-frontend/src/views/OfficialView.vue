@@ -22,7 +22,7 @@
             快速创建专业表单，无需编写代码，拖拽即可完成
           </n-text>
           <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <router-link to="/login">
+            <router-link :to="user.isLogin ? '/home' : '/login'">
               <n-button type="primary" size="large" class="px-8"> 立即开始</n-button>
             </router-link>
             <n-button size="large" class="px-8"> 查看演示</n-button>
@@ -236,6 +236,9 @@ import {
   NRate,
   NAvatar,
 } from 'naive-ui'
+import { useUserStore } from '@/stores/user.ts'
+
+const user = useUserStore()
 
 // Icons
 const FormOutlined = () =>

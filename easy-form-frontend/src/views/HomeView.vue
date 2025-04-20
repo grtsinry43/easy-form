@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { Delete24Regular, DocumentEdit20Regular } from '@vicons/fluent'
 import { useRouter } from 'vue-router'
+import { useMessage } from 'naive-ui'
 
 const message = useMessage()
 const router = useRouter()
 </script>
 
 <template>
-  <main class="mt-4">
+  <main class="mt-8">
     <n-h1 class="text-center w-full">EasyForm 零代码表单生成器</n-h1>
     <div class="flex m-8">
       <n-button type="success" class="mr-4"> 创建表单</n-button>

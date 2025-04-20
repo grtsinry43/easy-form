@@ -47,7 +47,7 @@ request.interceptors.response.use(
         }
         return null
       } else {
-        return response.data
+        return response.data.data
       }
     }
     return null

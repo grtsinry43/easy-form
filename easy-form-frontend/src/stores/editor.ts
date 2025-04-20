@@ -101,5 +101,54 @@ export const useEditorStore = defineStore('editorStore', {
       }
       this.formData.splice(newIndex, 0, initialValueMap[name]())
     },
+    initEditorData({
+      id,
+      title,
+      description,
+      type,
+      cover,
+      value,
+    }: {
+      id: string
+      title: string
+      description: string
+      type: string
+      cover: string
+      value: string
+    }) {
+      this.formMeta.title = title
+      this.formMeta.description = description
+      this.formMeta.coverImage = cover
+      this.formMeta.formId = id
+      this.formMeta.formType = type
+      const dataArr = JSON.parse(value)
+      this.formData = dataArr.map((item) => {
+        const { id, type } = item
+        const initialValueFn = initialValueMap[type]
+        if (initialValueFn) {
+          const initialValue = initialValueFn()
+          return {
+            id,
+            ...item,
+            value: Object.keys(item.value).reduce((acc: Record<string, any>, key: string) => {
+              const initialValueItem = (initialValue.value as Record<string, any>)[key]
+              const itemValue = (item.value as Record<string, any>)[key]
+              if (initialValueItem) {
+                acc[key] = {
+                  ...itemValue,
+                  // 使用工厂函数生成的响应式组件
+                  editComponent: initialValueItem.editComponent,
+                }
+              }
+              return acc
+            }, {}),
+            component: initialValue.component, // 使用工厂函数生成的响应式组件
+          }
+        } else {
+          console.error(`Unknown component type: ${type}`)
+          return item // 如果类型未知，返回原始项
+        }
+      })
+    },
   },
 })

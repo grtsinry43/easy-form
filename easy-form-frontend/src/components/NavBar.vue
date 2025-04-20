@@ -1,5 +1,5 @@
 <template>
-  <div
+  <header
     class="w-full bg-gray-50/70 dark:bg-black/70 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-800 fixed top-0 z-20"
   >
     <div class="mx-auto px-4">
@@ -63,11 +63,13 @@
                 <MoonIcon v-else />
               </template>
             </n-button>
-            <n-button circle>
-              <template #icon>
-                <BellIcon />
-              </template>
-            </n-button>
+            <n-dropdown :options="notificationList" @select="handleSelect">
+              <n-button circle>
+                <template #icon>
+                  <BellIcon />
+                </template>
+              </n-button>
+            </n-dropdown>
             <n-button
               type="primary"
               class="px-3 py-2"
@@ -77,9 +79,7 @@
               登录
             </n-button>
             <n-dropdown :options="userOptions" @select="handleSelect" v-else>
-              <n-avatar round size="small" :src="userAvatar">
-                {{ !userAvatar ? 'U' : '' }}
-              </n-avatar>
+              <n-avatar round size="small" :src="user.userInfo.avatar" />
             </n-dropdown>
           </div>
         </div>
@@ -129,61 +129,15 @@
               <BellIcon />
             </template>
           </n-button>
-          <n-avatar round size="small" :src="userAvatar">
-            {{ !userAvatar ? 'U' : '' }}
-          </n-avatar>
+          <n-avatar round size="small" :src="user.userInfo.avatar" />
         </div>
       </div>
     </div>
-  </div>
-  <!-- Header with theme toggle -->
-  <!--<header-->
-  <!--  class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-[#ebedf0] dark:border-[#303030]"-->
-  <!--&gt;-->
-  <!--  <div class="container mx-auto px-4 py-3 flex items-center justify-between">-->
-  <!--    <div class="flex items-center space-x-2">-->
-  <!--      <div-->
-  <!--        class="text-xl font-bold bg-gradient-to-r from-[#18a058] to-[#36ad6a] bg-clip-text text-transparent"-->
-  <!--      >-->
-  <!--        EasyForm-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    <div class="flex items-center space-x-6">-->
-  <!--      <nav class="hidden md:flex items-center space-x-6">-->
-  <!--        <a-->
-  <!--          href="#features"-->
-  <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
-  <!--        >-->
-  <!--          功能 -->
-  <!--        </a>-->
-  <!--        <a-->
-  <!--          href="#testimonials"-->
-  <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
-  <!--        >-->
-  <!--          用户反馈 -->
-  <!--        </a>-->
-  <!--        <a-->
-  <!--          href="#pricing"-->
-  <!--          class="text-sm font-medium hover:text-[#18a058] transition-colors"-->
-  <!--        >-->
-  <!--          定价 -->
-  <!--        </a>-->
-  <!--      </nav>-->
-  <!--      <n-button quaternary circle @click="toggleTheme">-->
-  <!--        <template #icon>-->
-  <!--          <n-icon size="18">-->
-  <!--            <sun-icon v-if="isDark" />-->
-  <!--            <moon-icon v-else />-->
-  <!--          </n-icon>-->
-  <!--        </template>-->
-  <!--      </n-button>-->
-  <!--    </div>-->
-  <!--  </div>-->
-  <!--</header>-->
+  </header>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, h } from 'vue'
 import {
   HomeIcon,
   LayoutIcon,
@@ -200,9 +154,9 @@ import { useTheme } from '@/utils/theme.ts'
 import { useUserStore } from '@/stores/user.ts'
 import { useRouter } from 'vue-router'
 import { getUserInfo } from '@/api/user.ts'
+import { NAvatar, NButton, NDropdown, NText, NCard } from 'naive-ui'
 
 const mobileMenuOpen = ref(false)
-const userAvatar = ref('')
 
 const { resolvedTheme, setTheme } = useTheme()
 
@@ -222,7 +176,38 @@ onMounted(async () => {
   }
 })
 
+const renderCustomHeader = () => {
+  return h(
+    'div',
+    {
+      style: 'display: flex; align-items: center; padding: 8px 12px;',
+    },
+    [
+      h(NAvatar, {
+        round: true,
+        style: 'margin-right: 12px;',
+        src: user.userInfo.avatar,
+      }),
+      h('div', null, [
+        h('div', null, [h(NText, { depth: 2 }, { default: () => user.userInfo.nickname })]),
+        h('div', { style: 'font-size: 12px;' }, [
+          h(NText, { depth: 3 }, { default: () => user.userInfo.email }),
+        ]),
+      ]),
+    ],
+  )
+}
+
 const userOptions = [
+  {
+    type: 'render',
+    render: renderCustomHeader,
+    key: 'userInfo',
+  },
+  {
+    type: 'divider',
+    key: 'd1',
+  },
   {
     label: '个人设置',
     key: 'settings',
@@ -233,11 +218,34 @@ const userOptions = [
   },
   {
     type: 'divider',
-    key: 'd1',
+    key: 'd2',
   },
   {
     label: '退出登录',
     key: 'logout',
+  },
+]
+
+const notificationList = [
+  {
+    label: '系统消息',
+    key: 'system',
+  },
+  {
+    label: '表单消息',
+    key: 'form',
+  },
+  {
+    label: '问卷消息',
+    key: 'questionnaire',
+  },
+  {
+    type: 'divider',
+    key: 'd1',
+  },
+  {
+    label: '通知设置',
+    key: 'settings',
   },
 ]
 

@@ -4,8 +4,21 @@ import { VueDraggable } from 'vue-draggable-plus'
 import { ArrowLeft } from '@vicons/carbon'
 import { useEditorStore } from '@/stores/editor.ts'
 import { NIcon } from 'naive-ui'
-import { provide, ref } from 'vue'
+import { onMounted, provide, ref } from 'vue'
 import { BookmarkOutline, ListOutline } from '@vicons/ionicons5'
+import { createForm, getFormById, updateForm } from '@/api/form.ts'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const id = route.params.id as string
+
+onMounted(async () => {
+  const form = await getFormById(id)
+  if (form) {
+    store.initEditorData(form)
+  }
+})
 
 const draggableKey = ref(0) // 创建一个响应式 key
 
@@ -67,7 +80,20 @@ const handleAdd = (event) => {
         </n-text>
       </n-space>
       <n-space>
-        <n-button secondary> 保存表单</n-button>
+        <n-button
+          secondary
+          @click="
+            () => {
+              updateForm({
+                id,
+                meta: store.formMeta,
+                data: store.formData,
+              })
+            }
+          "
+        >
+          保存表单
+        </n-button>
         <n-button type="info" secondary> 预览表单</n-button>
         <n-button type="success" secondary> 发布表单</n-button>
       </n-space>
