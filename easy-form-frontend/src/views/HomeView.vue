@@ -2,9 +2,17 @@
 import { Delete24Regular, DocumentEdit20Regular } from '@vicons/fluent'
 import { useRouter } from 'vue-router'
 import { useMessage } from 'naive-ui'
+import { onMounted } from 'vue'
+import { getAllForms } from '@/api/form.ts'
 
 const message = useMessage()
 const router = useRouter()
+
+onMounted(async () => {
+  message.success('欢迎使用 EasyForm 零代码表单生成器，正在加载数据...')
+  const allForms = await getAllForms()
+  console.log('allForms', allForms)
+})
 </script>
 
 <template>
@@ -38,195 +46,6 @@ const router = useRouter()
               }
             "
           >
-            <template #icon>
-              <n-icon>
-                <DocumentEdit20Regular />
-              </n-icon>
-            </template>
-          </n-button>
-          <n-button strong secondary circle type="error">
-            <template #icon>
-              <n-icon>
-                <Delete24Regular />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-      </n-card>
-      <n-card title="新建问卷2" hoverable>
-        <n-image width="100" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
-        <div class="mt-4">问卷的备注，假装写了很多很多</div>
-        <n-space class="mt-4">
-          <n-tag :bordered="false"> 爱在西元前</n-tag>
-          <n-tag :bordered="false" type="success"> 不该</n-tag>
-          <n-tag :bordered="false" type="warning"> 超人不会飞</n-tag>
-          <n-tag :bordered="false" type="error"> 手写的从前</n-tag>
-          <n-tag :bordered="false" type="info"> 哪里都是你</n-tag>
-        </n-space>
-        <n-space class="mt-4 flex" justify="end">
-          <n-button strong secondary circle type="info">
-            <template #icon>
-              <n-icon>
-                <DocumentEdit20Regular />
-              </n-icon>
-            </template>
-          </n-button>
-          <n-button strong secondary circle type="error">
-            <template #icon>
-              <n-icon>
-                <Delete24Regular />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-      </n-card>
-      <n-card title="新建问卷2" hoverable>
-        <n-image width="100" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
-        <div class="mt-4">问卷的备注，假装写了很多很多</div>
-        <n-space class="mt-4">
-          <n-tag :bordered="false"> 爱在西元前</n-tag>
-          <n-tag :bordered="false" type="success"> 不该</n-tag>
-          <n-tag :bordered="false" type="warning"> 超人不会飞</n-tag>
-          <n-tag :bordered="false" type="error"> 手写的从前</n-tag>
-          <n-tag :bordered="false" type="info"> 哪里都是你</n-tag>
-        </n-space>
-        <n-space class="mt-4 flex" justify="end">
-          <n-button strong secondary circle type="info">
-            <template #icon>
-              <n-icon>
-                <DocumentEdit20Regular />
-              </n-icon>
-            </template>
-          </n-button>
-          <n-button strong secondary circle type="error">
-            <template #icon>
-              <n-icon>
-                <Delete24Regular />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-      </n-card>
-      <n-card title="新建问卷2" hoverable>
-        <n-image width="100" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
-        <div class="mt-4">问卷的备注，假装写了很多很多</div>
-        <n-space class="mt-4">
-          <n-tag :bordered="false"> 爱在西元前</n-tag>
-          <n-tag :bordered="false" type="success"> 不该</n-tag>
-          <n-tag :bordered="false" type="warning"> 超人不会飞</n-tag>
-          <n-tag :bordered="false" type="error"> 手写的从前</n-tag>
-          <n-tag :bordered="false" type="info"> 哪里都是你</n-tag>
-        </n-space>
-        <n-space class="mt-4 flex" justify="end">
-          <n-button strong secondary circle type="info">
-            <template #icon>
-              <n-icon>
-                <DocumentEdit20Regular />
-              </n-icon>
-            </template>
-          </n-button>
-          <n-button strong secondary circle type="error">
-            <template #icon>
-              <n-icon>
-                <Delete24Regular />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-      </n-card>
-      <n-card title="新建问卷2" hoverable>
-        <n-image width="100" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
-        <div class="mt-4">问卷的备注，假装写了很多很多</div>
-        <n-space class="mt-4">
-          <n-tag :bordered="false"> 爱在西元前</n-tag>
-          <n-tag :bordered="false" type="success"> 不该</n-tag>
-          <n-tag :bordered="false" type="warning"> 超人不会飞</n-tag>
-          <n-tag :bordered="false" type="error"> 手写的从前</n-tag>
-          <n-tag :bordered="false" type="info"> 哪里都是你</n-tag>
-        </n-space>
-        <n-space class="mt-4 flex" justify="end">
-          <n-button strong secondary circle type="info">
-            <template #icon>
-              <n-icon>
-                <DocumentEdit20Regular />
-              </n-icon>
-            </template>
-          </n-button>
-          <n-button strong secondary circle type="error">
-            <template #icon>
-              <n-icon>
-                <Delete24Regular />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-      </n-card>
-      <n-card title="新建问卷2" hoverable>
-        <n-image width="100" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
-        <div class="mt-4">问卷的备注，假装写了很多很多</div>
-        <n-space class="mt-4">
-          <n-tag :bordered="false"> 爱在西元前</n-tag>
-          <n-tag :bordered="false" type="success"> 不该</n-tag>
-          <n-tag :bordered="false" type="warning"> 超人不会飞</n-tag>
-          <n-tag :bordered="false" type="error"> 手写的从前</n-tag>
-          <n-tag :bordered="false" type="info"> 哪里都是你</n-tag>
-        </n-space>
-        <n-space class="mt-4 flex" justify="end">
-          <n-button strong secondary circle type="info">
-            <template #icon>
-              <n-icon>
-                <DocumentEdit20Regular />
-              </n-icon>
-            </template>
-          </n-button>
-          <n-button strong secondary circle type="error">
-            <template #icon>
-              <n-icon>
-                <Delete24Regular />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-      </n-card>
-      <n-card title="新建问卷2" hoverable>
-        <n-image width="100" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
-        <div class="mt-4">问卷的备注，假装写了很多很多</div>
-        <n-space class="mt-4">
-          <n-tag :bordered="false"> 爱在西元前</n-tag>
-          <n-tag :bordered="false" type="success"> 不该</n-tag>
-          <n-tag :bordered="false" type="warning"> 超人不会飞</n-tag>
-          <n-tag :bordered="false" type="error"> 手写的从前</n-tag>
-          <n-tag :bordered="false" type="info"> 哪里都是你</n-tag>
-        </n-space>
-        <n-space class="mt-4 flex" justify="end">
-          <n-button strong secondary circle type="info">
-            <template #icon>
-              <n-icon>
-                <DocumentEdit20Regular />
-              </n-icon>
-            </template>
-          </n-button>
-          <n-button strong secondary circle type="error">
-            <template #icon>
-              <n-icon>
-                <Delete24Regular />
-              </n-icon>
-            </template>
-          </n-button>
-        </n-space>
-      </n-card>
-      <n-card title="新建问卷2" hoverable>
-        <n-image width="100" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
-        <div class="mt-4">问卷的备注，假装写了很多很多</div>
-        <n-space class="mt-4">
-          <n-tag :bordered="false"> 爱在西元前</n-tag>
-          <n-tag :bordered="false" type="success"> 不该</n-tag>
-          <n-tag :bordered="false" type="warning"> 超人不会飞</n-tag>
-          <n-tag :bordered="false" type="error"> 手写的从前</n-tag>
-          <n-tag :bordered="false" type="info"> 哪里都是你</n-tag>
-        </n-space>
-        <n-space class="mt-4 flex" justify="end">
-          <n-button strong secondary circle type="info">
             <template #icon>
               <n-icon>
                 <DocumentEdit20Regular />

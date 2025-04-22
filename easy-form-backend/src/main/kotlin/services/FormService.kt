@@ -133,6 +133,25 @@ class FormService(database: Database) {
         }
     }
 
+    suspend fun getAllByUserId(userId: Int): List<FormVO> {
+        return dbQuery {
+            Forms.selectAll()
+                .where { Forms.userId eq userId }
+                .map {
+                    FormVO(
+                        id = it[Forms.id].toString(),
+                        title = it[Forms.title],
+                        type = it[Forms.type],
+                        description = it[Forms.description],
+                        cover = it[Forms.cover],
+                        value = it[Forms.value],
+                        createAt = it[Forms.createAt].toKotlinInstant(),
+                        updateAt = it[Forms.updateAt].toKotlinInstant()
+                    )
+                }
+        }
+    }
+
     suspend fun delete(id: Int) {
         dbQuery {
             Forms.deleteWhere { Forms.id eq id }

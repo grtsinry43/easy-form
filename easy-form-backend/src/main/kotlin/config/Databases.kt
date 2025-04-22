@@ -57,12 +57,14 @@ fun Application.configureDatabases() {
             put("/form/update/{id}") {
                 val form = call.receive<FormUpdateRequest>()
                 val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("无效ID")
-                call.principal<JWTPrincipal>()?.let { principal ->
-                    principal.payload.getClaim("userId").asString().let { userId ->
-                        formService.update(id, form)
-                        call.respond(HttpStatusCode.Created, ApiResponse.ok("Form created successfully"))
-                    }
-                } ?: call.respond(HttpStatusCode.Unauthorized)
+                val userId = call.principal<JWTPrincipal>()
+                    ?.payload
+                    ?.getClaim("userId")
+                    ?.asString()
+                    ?: return@put call.respond(HttpStatusCode.Unauthorized)
+
+                formService.update(id, form)
+                call.respond(HttpStatusCode.Created, ApiResponse.ok("Form created successfully"))
             }
 
             get("/form/{id}") {
@@ -71,7 +73,18 @@ fun Application.configureDatabases() {
                 if (form != null) {
                     call.respond(HttpStatusCode.OK, ApiResponse.ok(form))
                 } else {
-                    call.respond(HttpStatusCode.NotFound, ApiResponse.error(ErrorCode.NOT_FOUND))
+                    call.respond(HttpStatusCode.OK, ApiResponse.error(ErrorCode.NOT_FOUND))
+                }
+            }
+
+            get("/form") {
+                val userId = call.principal<JWTPrincipal>()
+                    ?.payload
+                    ?.getClaim("userId")
+                    ?.asString()
+                    ?: return@get call.respond(HttpStatusCode.Unauthorized)
+                formService.getAllByUserId(userId.toInt()).let { forms ->
+                    call.respond(HttpStatusCode.OK, ApiResponse.ok(forms))
                 }
             }
         }

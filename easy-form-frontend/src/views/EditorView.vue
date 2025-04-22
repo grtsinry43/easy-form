@@ -7,16 +7,20 @@ import { NIcon } from 'naive-ui'
 import { onMounted, provide, ref } from 'vue'
 import { BookmarkOutline, ListOutline } from '@vicons/ionicons5'
 import { createForm, getFormById, updateForm } from '@/api/form.ts'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 
 const id = route.params.id as string
 
 onMounted(async () => {
   const form = await getFormById(id)
+  console.log('form', form)
   if (form) {
     store.initEditorData(form)
+  } else {
+    router.push({ name: 'not-found' })
   }
 })
 

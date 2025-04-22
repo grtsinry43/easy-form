@@ -51,6 +51,11 @@ const routes: RouteRecordRaw[] = [
     name: 'form',
     component: () => import('../views/FormView.vue'),
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('../views/NotFoundView.vue'),
+  },
 ]
 
 componentTypes.value.forEach((type) => {

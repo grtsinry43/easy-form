@@ -8,8 +8,8 @@ const props = defineProps({
   },
   configKey: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const updateVal = inject('updateVal') as ((key: string, value: string) => void) | undefined

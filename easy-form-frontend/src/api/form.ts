@@ -49,3 +49,7 @@ export const updateForm = async ({
 export const getFormById = async (formId: string) => {
   return await request.get(`/form/${formId}`)
 }
+
+export const getAllForms = async (): Promise<ComponentValue[]> => {
+  return await request.get('/form')
+}
