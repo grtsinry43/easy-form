@@ -2,24 +2,18 @@ import { request } from '@/api/request.ts'
 import type { ComponentValue } from '@/stores/material-components.ts'
 
 export const createForm = async ({
-  meta,
-  data,
+  title,
+  description,
+  type,
 }: {
-  meta: {
-    title: string
-    description: string
-    coverImage: string
-    formId: string
-    formType: string
-  }
-  data: ComponentValue[]
+  title: string
+  description: string
+  type: string
 }) => {
   return await request.post('/form/create', {
-    title: meta.title,
-    description: meta.description,
-    type: meta.formType,
-    cover: meta.coverImage,
-    value: JSON.stringify(data),
+    title,
+    description,
+    type,
   })
 }
 

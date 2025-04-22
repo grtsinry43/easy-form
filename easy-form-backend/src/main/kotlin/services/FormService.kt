@@ -59,8 +59,7 @@ class FormService(database: Database) {
             it[Forms.userId] = userId.toIntOrNull()
             it[type] = form.type
             it[description] = form.description
-            it[cover] = form.cover
-            it[value] = form.value
+            it[value] = "[]"
         }[Forms.id]
     }
 

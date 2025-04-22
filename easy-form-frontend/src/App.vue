@@ -23,16 +23,20 @@ const themeOverrides = computed(() =>
     :locale="zhCN"
     :date-locale="dateZhCN"
   >
-    <n-message-provider>
-      <NavBar />
-      <div class="h-16 w-full"></div>
-      <!--<router-view v-slot="{ Component, route }">-->
-      <!--  <transition name="page-transition" mode="out-in" appear>-->
-      <!--    <component :is="Component" :key="route.path" />-->
-      <!--  </transition>-->
-      <!--</router-view>-->
-      <router-view />
-    </n-message-provider>
+    <n-dialog-provider>
+      <n-message-provider>
+        <n-modal-provider>
+          <NavBar />
+          <div class="h-16 w-full"></div>
+          <!--<router-view v-slot="{ Component, route }">-->
+          <!--  <transition name="page-transition" mode="out-in" appear>-->
+          <!--    <component :is="Component" :key="route.path" />-->
+          <!--  </transition>-->
+          <!--</router-view>-->
+          <router-view />
+        </n-modal-provider>
+      </n-message-provider>
+    </n-dialog-provider>
   </n-config-provider>
 </template>
 

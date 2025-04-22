@@ -12,6 +12,4 @@ data class FormCreateRequest(
     val title: String,
     val type: String,
     val description: String,
-    val cover: String? = null,
-    val value: String  // JSON 格式的字符串
 )

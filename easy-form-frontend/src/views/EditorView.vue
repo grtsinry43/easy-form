@@ -3,14 +3,19 @@ import componentTypes from '@/meta/component-meta.ts'
 import { VueDraggable } from 'vue-draggable-plus'
 import { ArrowLeft } from '@vicons/carbon'
 import { useEditorStore } from '@/stores/editor.ts'
-import { NIcon } from 'naive-ui'
-import { onMounted, provide, ref } from 'vue'
+import { NIcon, useMessage, useDialog } from 'naive-ui'
+import { onMounted, provide, ref, onBeforeUnmount } from 'vue'
 import { BookmarkOutline, ListOutline } from '@vicons/ionicons5'
+import { DeleteTwotone } from '@vicons/material'
 import { createForm, getFormById, updateForm } from '@/api/form.ts'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+
+const message = useMessage()
+
+const dialog = useDialog()
 
 const id = route.params.id as string
 
@@ -32,6 +37,20 @@ const curMenu = ref('items')
 provide('updateVal', (configKey: string, newVal: string | number | string[] | number[]) => {
   store.updateComponentInFormData(configKey, newVal)
 })
+
+const saveFormHandle = async () => {
+  const res = await updateForm({
+    id,
+    meta: store.formMeta,
+    data: store.formData,
+  })
+  console.log('保存结果', res)
+  if (res) {
+    message.success('保存成功')
+  } else {
+    message.error('保存出现了问题 :(，请尝试重新保存')
+  }
+}
 
 const menuOptions = [
   {
@@ -59,11 +78,44 @@ const handleSort = (event): void => {
 
 // 自定义拖入处理逻辑
 const handleAdd = (event) => {
-  console.log('拖入事件:', event)
   const { newIndex, data } = event
   store.addComponentAtIndex(newIndex, data.id)
-  console.log('拖入完成:', store.formData)
 }
+
+const deleteComponentHandle = (id: string, title: string) => {
+  dialog.warning({
+    title: ` 删除组件"${title}"`,
+    content: '确定要删除该组件吗？这个操作不可撤销。',
+    positiveText: '删除',
+    negativeText: '取消',
+    onPositiveClick: () => {
+      store.removeComponent(id)
+      message.success('删除成功')
+    },
+  })
+}
+
+let autoSaveInterval: NodeJS.Timeout | null = null
+
+onMounted(() => {
+  // 当窗口失焦触发自动保存
+  window.addEventListener('blur', () => {
+    saveFormHandle()
+  })
+  // 每 30 秒自动保存一次
+  autoSaveInterval = setInterval(() => {
+    saveFormHandle()
+  }, 30000)
+})
+
+onBeforeUnmount(() => {
+  // 清除定时器
+  if (autoSaveInterval) {
+    clearInterval(autoSaveInterval)
+  }
+  // 移除事件监听器
+  window.removeEventListener('blur', saveFormHandle)
+})
 </script>
 
 <template>
@@ -84,20 +136,7 @@ const handleAdd = (event) => {
         </n-text>
       </n-space>
       <n-space>
-        <n-button
-          secondary
-          @click="
-            () => {
-              updateForm({
-                id,
-                meta: store.formMeta,
-                data: store.formData,
-              })
-            }
-          "
-        >
-          保存表单
-        </n-button>
+        <n-button secondary @click="saveFormHandle"> 保存表单</n-button>
         <n-button type="info" secondary> 预览表单</n-button>
         <n-button type="success" secondary> 发布表单</n-button>
       </n-space>
@@ -204,7 +243,7 @@ const handleAdd = (event) => {
                 <n-card
                   v-for="(item, index) in store.formData"
                   :key="item.id"
-                  class="mb-4 rounded-md hover:border-green-700 relative transition"
+                  class="mb-4 rounded-md hover:border-green-700 relative transition card-container"
                   hoverable
                   @click="store.setCurrentEditComponentId(item.id)"
                   :style="{
@@ -219,6 +258,20 @@ const handleAdd = (event) => {
                     processing
                     class="absolute top-2 right-2"
                   />
+                  <!-- 删除按钮 -->
+                  <n-button
+                    type="error"
+                    class="absolute top-0 right-0 z-10 delete-btn rounded-md"
+                    secondary
+                    @click.stop="deleteComponentHandle(item.id, item.value.title.value)"
+                    size="tiny"
+                  >
+                    <template #icon>
+                      <n-icon>
+                        <DeleteTwotone />
+                      </n-icon>
+                    </template>
+                  </n-button>
                   <component
                     :is="item.component"
                     :serialNum="index + 1"
@@ -266,3 +319,13 @@ const handleAdd = (event) => {
     </n-split>
   </div>
 </template>
+
+<style scoped>
+.delete-btn {
+  display: none;
+}
+
+.card-container:hover .delete-btn {
+  display: inline-flex;
+}
+</style>

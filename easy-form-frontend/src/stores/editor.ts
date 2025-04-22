@@ -65,7 +65,7 @@ export const useEditorStore = defineStore('editorStore', {
       }
     },
     // 删除组件从表单数据
-    removeComponentFromFormData(id) {
+    removeComponent(id: string) {
       this.formData = this.formData.filter((component) => component.id !== id)
     },
     // 通过 ID 获取组件

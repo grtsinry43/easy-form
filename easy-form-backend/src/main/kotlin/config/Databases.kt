@@ -48,8 +48,9 @@ fun Application.configureDatabases() {
                 val form = call.receive<FormCreateRequest>()
                 call.principal<JWTPrincipal>()?.let { principal ->
                     principal.payload.getClaim("userId").asString().let { userId ->
-                        formService.create(form, userId)
-                        call.respond(HttpStatusCode.Created, ApiResponse.ok("Form created successfully"))
+                        formService.create(form, userId).let { id ->
+                            call.respond(HttpStatusCode.Created, ApiResponse.ok(id))
+                        }
                     }
                 } ?: call.respond(HttpStatusCode.Unauthorized)
             }
