@@ -4,11 +4,13 @@ import { VueDraggable } from 'vue-draggable-plus'
 import { ArrowLeft } from '@vicons/carbon'
 import { useEditorStore } from '@/stores/editor.ts'
 import { NIcon, useMessage, useDialog } from 'naive-ui'
-import { onMounted, provide, ref, onBeforeUnmount } from 'vue'
+import { onMounted, provide, ref, onBeforeUnmount, nextTick } from 'vue'
 import { BookmarkOutline, ListOutline } from '@vicons/ionicons5'
 import { DeleteTwotone } from '@vicons/material'
 import { createForm, getFormById, updateForm } from '@/api/form.ts'
 import { useRoute, useRouter } from 'vue-router'
+import type { ComponentValueMap } from '@/configs/initialValue/initialValueMap.ts'
+import eventBus from '@/utils/eventBus.ts'
 
 const route = useRoute()
 const router = useRouter()
@@ -95,6 +97,8 @@ const deleteComponentHandle = (id: string, title: string) => {
   })
 }
 
+const scrollAreaRef = ref(null)
+
 let autoSaveInterval: NodeJS.Timeout | null = null
 
 onMounted(() => {
@@ -106,6 +110,18 @@ onMounted(() => {
   autoSaveInterval = setInterval(() => {
     saveFormHandle()
   }, 30000)
+
+  eventBus.on('addComponent', () => {
+    nextTick(() => {
+      if (scrollAreaRef.value) {
+        // 直接滚动一个大距离，效果等同于滚动到底部
+        scrollAreaRef.value.scrollBy({
+          top: 1000000,
+          behavior: 'smooth',
+        })
+      }
+    })
+  })
 })
 
 onBeforeUnmount(() => {
@@ -193,6 +209,13 @@ onBeforeUnmount(() => {
                       >
                         <div
                           v-for="btn in type.buttons"
+                          @click="
+                            () => {
+                              store.addComponentToFormData(btn.id as keyof ComponentValueMap)
+                              store.setCurrentEditComponentId(null)
+                              message.success('组件' + btn.text + '添加成功')
+                            }
+                          "
                           :key="btn.id"
                           class="border rounded-sm p-2 m-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-gray-300 dark:border-gray-600"
                         >
@@ -203,7 +226,7 @@ onBeforeUnmount(() => {
                   </template>
                 </n-collapse-item>
               </n-collapse>
-              <div v-else>
+              <n-scrollbar class="h-full" v-else>
                 <n-list class="bg-transparent" hoverable clickable>
                   <n-list-item
                     v-for="(item, index) in store.formData"
@@ -216,7 +239,7 @@ onBeforeUnmount(() => {
                     </div>
                   </n-list-item>
                 </n-list>
-              </div>
+              </n-scrollbar>
             </n-layout>
           </n-layout>
         </nav>
@@ -231,7 +254,7 @@ onBeforeUnmount(() => {
           :max="1"
         >
           <template #1>
-            <n-scrollbar class="p-8 h-full">
+            <n-scrollbar class="p-8 h-full" ref="scrollAreaRef">
               <vue-draggable
                 :group="{ name: 'test', pull: false, put: true }"
                 class="flex flex-col gap-1 w-full h-full p-1"

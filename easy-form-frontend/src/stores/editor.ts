@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { initialValueMap } from '@/configs/initialValue/initialValueMap.ts'
 import type { ComponentValue } from '@/stores/material-components.ts'
+import eventBus from '@/utils/eventBus.ts'
 
 export const useEditorStore = defineStore('editorStore', {
   state: () => ({
@@ -91,6 +92,16 @@ export const useEditorStore = defineStore('editorStore', {
       this.formData.splice(newIndex, 0, movedItem)
 
       console.log('重新排序后的表单数据', this.formData)
+    },
+    addComponentToFormData(name: string) {
+      const initialValueFn = initialValueMap[name]
+      if (initialValueFn) {
+        const newComponent = initialValueFn()
+        this.formData.push(newComponent)
+        eventBus.emit('addComponent')
+      } else {
+        console.error(`Unknown component type: ${name}`)
+      }
     },
 
     // 在指定索引位置添加新组件
