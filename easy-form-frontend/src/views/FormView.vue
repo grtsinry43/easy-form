@@ -1,25 +1,65 @@
 <script setup lang="ts">
-import { useEditorStore } from '@/stores/editor.ts'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useFormStore } from '@/stores/form.ts'
+import { getFormById } from '@/api/form.ts'
+import { useRouter, useRoute } from 'vue-router'
+import { useMessage } from 'naive-ui'
 
-const store = useEditorStore()
+const store = useFormStore()
+const router = useRouter()
+const route = useRoute()
+const id = route.params.id as string
+const message = useMessage()
+
+export interface FormDetail {
+  id: string
+  title: string
+  description: string
+  type: string
+  cover: string
+  value: string // value 是 formData 的 JSON 字符串
+}
 
 // 计算问卷标题
 const formTitle = computed(() =>
   store.formMeta.title.length === 0 ? '新建问卷' : store.formMeta.title,
 )
+
+onMounted(async () => {
+  try {
+    const form: FormDetail | null = await getFormById(id)
+    if (form) {
+      store.initEditorData({
+        id: form.id,
+        title: form.title,
+        description: form.description,
+        type: form.type,
+        cover: form.cover,
+        value: form.value,
+      })
+    } else {
+      message.error(`表单 ID "${id}" 未找到。`)
+      router.push({ name: 'not-found' })
+    }
+  } catch (error) {
+    console.error('获取表单数据时出错:', error)
+    message.error('加载表单数据失败。')
+    // 可以考虑跳转到错误页或主页
+    // router.push({ name: 'home' });
+  }
+})
 </script>
 
 <template>
   <div
-    class="flex justify-center items-center min-h-[calc(100vh-64px-48px)] p-5 bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
+    class="flex justify-center items-center min-h-[calc(100vh-64px-48px)] p-5 bg-gray-100 dark:bg-black transition-colors duration-300"
   >
     <div
-      class="relative w-full max-w-4xl min-h-[80vh] bg-white dark:bg-gray-800 rounded shadow-md dark:shadow-gray-950/50 py-10 overflow-hidden transition-all duration-300"
+      class="relative w-full max-w-4xl min-h-[80vh] bg-white dark:bg-gray-950 rounded shadow-md dark:shadow-gray-950/50 py-10 overflow-hidden transition-all duration-300"
     >
       <!-- 纸张顶部边框 -->
       <div
-        class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700"
+        class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-600 dark:from-green-500 dark:to-green-700"
       ></div>
 
       <!-- 纸张纹理 (仅在浅色模式显示) -->
@@ -29,7 +69,7 @@ const formTitle = computed(() =>
 
       <!-- 问卷标题 -->
       <div
-        class="mb-8 text-center border-b border-dashed border-gray-200 dark:border-gray-700 pb-5"
+        class="mb-8 text-center border-b border-dashed border-gray-200 dark:border-green-900 pb-5"
       >
         <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 relative inline-block">
           {{ formTitle }}
@@ -45,7 +85,7 @@ const formTitle = computed(() =>
           <div
             v-for="(item, index) in store.formData"
             :key="item.id"
-            class="flex mb-6 p-4 rounded transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-750/50 relative"
+            class="flex mb-6 p-4 rounded transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-900 relative"
           >
             <div
               class="flex-shrink-0 w-7 h-7 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mr-4 mt-0.5 font-bold text-gray-600 dark:text-gray-300"

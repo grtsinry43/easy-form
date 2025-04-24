@@ -37,7 +37,7 @@ interface EditorState {
   formData: Array<BaseComponentType<ComponentValueMap[keyof ComponentValueMap]>>
 }
 
-export const useEditorStore = defineStore('editorStore', {
+export const useFormStore = defineStore('editorStore', {
   state: (): EditorState => ({
     currentEditComponentId: '',
     formMeta: {
@@ -50,20 +50,9 @@ export const useEditorStore = defineStore('editorStore', {
     // 初始化时可以为空，或根据需要加载默认值
     // 注意：这里的初始值可能与类型定义不完全匹配，因为它们是函数调用
     // 为了类型安全，最好在应用加载后通过 action 初始化
-    formData: [
-    ] as Array<BaseComponentType<ComponentValueMap[keyof ComponentValueMap]>>, // 添加类型断言以匹配 EditorState
+    formData: [] as Array<BaseComponentType<ComponentValueMap[keyof ComponentValueMap]>>, // 添加类型断言以匹配 EditorState
   }),
   actions: {
-    setCurrentEditComponentId(id: string) {
-      console.log('setCurrentEditComponentId', id)
-      this.currentEditComponentId = id
-    },
-
-    setFormMeta(meta: Partial<FormMeta>) {
-      // 允许部分更新
-      this.formMeta = { ...this.formMeta, ...meta }
-    },
-
     updateComponentInFormData(configKey: string, newVal: string | number | string[] | number[]) {
       console.log('updateComponentInFormData', configKey, newVal)
 
@@ -116,58 +105,6 @@ export const useEditorStore = defineStore('editorStore', {
         console.error(`Invalid configKey "${configKey}" for component type ${component.type}`)
       }
     },
-
-    removeComponent(id: string) {
-      this.formData = this.formData.filter((component) => component.id !== id)
-    },
-
-    getComponentById(id: string) {
-      // 类型已在 state 中定义，find 会返回正确的类型或 undefined
-      return this.formData.find((component) => component.id === id)
-    },
-
-    reorderFormDataByIndex(oldIndex: number, newIndex: number) {
-      if (
-        oldIndex < 0 ||
-        oldIndex >= this.formData.length ||
-        newIndex < 0 ||
-        newIndex >= this.formData.length
-      ) {
-        console.error('Index out of range for reordering')
-        return
-      }
-      const [movedItem] = this.formData.splice(oldIndex, 1)
-      this.formData.splice(newIndex, 0, movedItem)
-      console.log('Form data reordered:', this.formData)
-    },
-
-    addComponentToFormData(name: keyof ComponentValueMap) {
-      // 强制类型为已知组件
-      const initialValueFn = initialValueMap[name]
-      if (initialValueFn) {
-        const newComponent = initialValueFn() // newComponent 类型应为 BaseComponentType<ComponentValueMap[typeof name]>
-        this.formData.push(newComponent)
-        eventBus.emit('addComponent') // 考虑为 eventBus 定义具体事件类型
-      } else {
-        console.error(`Unknown component type: ${name}`)
-      }
-    },
-
-    addComponentAtIndex(newIndex: number, name: keyof ComponentValueMap) {
-      // 强制类型
-      if (newIndex < 0 || newIndex > this.formData.length) {
-        console.error('Index out of range for adding component')
-        return
-      }
-      const initialValueFn = initialValueMap[name]
-      if (initialValueFn) {
-        const newComponent = initialValueFn()
-        this.formData.splice(newIndex, 0, newComponent)
-      } else {
-        console.error(`Unknown component type: ${name}`)
-      }
-    },
-
     initEditorData({
       id,
       title,
@@ -233,8 +170,7 @@ export const useEditorStore = defineStore('editorStore', {
                         currentValue: savedProp.currentValue,
                       }),
                     }),
-                    // 确保 editComponent 来自初始值
-                    editComponent: initialProp.editComponent,
+                    editComponent: null,
                   }
                 }
               }

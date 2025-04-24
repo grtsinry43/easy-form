@@ -1,5 +1,6 @@
 import { request } from '@/api/request.ts'
 import type { ComponentValue } from '@/stores/material-components.ts'
+import type { FormDetail } from '@/views/EditorView.vue'
 
 export const createForm = async ({
   title,
@@ -40,7 +41,7 @@ export const updateForm = async ({
   })
 }
 
-export const getFormById = async (formId: string) => {
+export const getFormById = async (formId: string): Promise<FormDetail> => {
   return await request.get(`/form/${formId}`)
 }
 

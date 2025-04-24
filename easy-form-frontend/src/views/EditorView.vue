@@ -1,136 +1,204 @@
 <script setup lang="ts">
-import componentTypes from '@/meta/component-meta.ts'
+import { ref, onMounted, provide, onBeforeUnmount, nextTick, computed } from 'vue' // 引入 computed
+import { useRoute, useRouter } from 'vue-router'
+import { NIcon, NScrollbar, useMessage, useDialog } from 'naive-ui' // 引入 NScrollbar 类型
+// 尝试从 vue-draggable-plus 导入类型，如果不存在，则使用自定义接口
 import { VueDraggable } from 'vue-draggable-plus'
 import { ArrowLeft } from '@vicons/carbon'
-import { useEditorStore } from '@/stores/editor.ts'
-import { NIcon, useMessage, useDialog } from 'naive-ui'
-import { onMounted, provide, ref, onBeforeUnmount, nextTick } from 'vue'
 import { BookmarkOutline, ListOutline } from '@vicons/ionicons5'
 import { DeleteTwotone } from '@vicons/material'
-import { createForm, getFormById, updateForm } from '@/api/form.ts'
-import { useRoute, useRouter } from 'vue-router'
-import type { ComponentValueMap } from '@/configs/initialValue/initialValueMap.ts'
+import componentTypes from '@/meta/component-meta.ts'
+import { useEditorStore } from '@/stores/editor.ts'
+import { getFormById, updateForm } from '@/api/form.ts'
+import { type ComponentValueMap, initialValueMap } from '@/configs/initialValue/initialValueMap.ts'
+import type { ComponentProperty } from '@/types/material.ts' // 引入 ComponentProperty 和 BaseComponentType
 import eventBus from '@/utils/eventBus.ts'
+import type { VueComponentType } from '@/types/common.ts'
+
+// 1. 定义 API 返回类型
+export interface FormDetail {
+  id: string
+  title: string
+  description: string
+  type: string
+  cover: string
+  value: string // value 是 formData 的 JSON 字符串
+}
+
+// 2. 定义 Draggable 事件类型 (如果库未导出或不精确)
+interface DraggableSortEvent {
+  oldIndex: number
+  newIndex: number
+}
 
 const route = useRoute()
 const router = useRouter()
-
 const message = useMessage()
-
 const dialog = useDialog()
 
-const id = route.params.id as string
-
-onMounted(async () => {
-  const form = await getFormById(id)
-  console.log('form', form)
-  if (form) {
-    store.initEditorData(form)
-  } else {
-    router.push({ name: 'not-found' })
-  }
-})
-
-const draggableKey = ref(0) // 创建一个响应式 key
+// 确保 ID 是字符串
+const id: string = Array.isArray(route.params.id) ? route.params.id[0] : (route.params.id as string)
 
 const store = useEditorStore()
+const draggableKey = ref(0) // 用于强制刷新 Draggable
 const curMenu = ref('items')
+// 4. 为 Ref 添加类型
+const scrollAreaRef = ref<InstanceType<typeof NScrollbar> | null>(null)
+// 7. 使用 number 类型
+let autoSaveInterval: number | null = null
 
+onMounted(async () => {
+  try {
+    const form: FormDetail | null = await getFormById(id)
+    if (form) {
+      store.initEditorData({
+        id: form.id,
+        title: form.title,
+        description: form.description,
+        type: form.type,
+        cover: form.cover,
+        value: form.value,
+      })
+    } else {
+      message.error(`表单 ID "${id}" 未找到。`)
+      router.push({ name: 'not-found' })
+    }
+  } catch (error) {
+    console.error('获取表单数据时出错:', error)
+    message.error('加载表单数据失败。')
+    // 可以考虑跳转到错误页或主页
+    // router.push({ name: 'home' });
+  }
+
+  // --- AutoSave 和 EventBus 设置 ---
+  window.addEventListener('blur', () => saveFormHandle(false)) // 考虑防抖
+  autoSaveInterval = setInterval(() => saveFormHandle(false), 30000) // 30秒自动保存
+  eventBus.on('addComponent', scrollToBottom)
+})
+
+onBeforeUnmount(() => {
+  // 清理
+  if (autoSaveInterval) {
+    clearInterval(autoSaveInterval)
+  }
+  window.removeEventListener('blur', () => saveFormHandle(false))
+  eventBus.off('addComponent', scrollToBottom)
+})
+
+// 滚动到底部逻辑
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (scrollAreaRef.value) {
+      // 尝试获取滚动内容元素并滚动
+      const contentEl = scrollAreaRef.value.$el?.querySelector('.n-scrollbar-content')
+      if (contentEl) {
+        // 使用 scrollHeight 滚动到底部
+        contentEl.scrollTo({ top: contentEl.scrollHeight, behavior: 'smooth' })
+      }
+    }
+  })
+}
+
+// 提供给子组件的更新方法
 provide('updateVal', (configKey: string, newVal: string | number | string[] | number[]) => {
   store.updateComponentInFormData(configKey, newVal)
 })
 
-const saveFormHandle = async () => {
-  const res = await updateForm({
-    id,
-    meta: store.formMeta,
-    data: store.formData,
-  })
-  console.log('保存结果', res)
-  if (res) {
-    message.success('保存成功')
-  } else {
-    message.error('保存出现了问题 :(，请尝试重新保存')
+// 保存表单逻辑
+const saveFormHandle = async (msg: boolean = false) => {
+  // 可以在这里添加加载状态
+  try {
+    const res = await updateForm({
+      id,
+      meta: store.formMeta,
+      data: store.formData, // 确保 store.formData 是 API 期望的格式
+    })
+    if (res) {
+      // 减少频繁的成功提示，尤其是在自动保存时
+      if (msg) message.success('保存成功')
+      console.log('表单已自动保存')
+    } else {
+      message.error('保存失败，请检查网络或稍后重试')
+    }
+  } catch (error) {
+    console.error('保存表单时出错:', error)
+    message.error('保存表单时发生错误')
+  } finally {
+    // 结束加载状态
   }
 }
 
-const menuOptions = [
-  {
-    label: '项目',
-    key: 'items',
-    icon: ListOutline,
-  },
-  {
-    label: '大纲',
-    key: 'outline',
-    icon: BookmarkOutline,
-  },
+// 菜单选项
+const menuOptions: Array<{ label: string; key: string; icon: VueComponentType }> = [
+  { label: '项目', key: 'items', icon: ListOutline },
+  { label: '大纲', key: 'outline', icon: BookmarkOutline },
 ]
 
-// 自定义排序处理逻辑
-const handleSort = (event): void => {
-  console.log(event)
-  const { oldIndex, newIndex } = event
-  console.log('排序:', oldIndex, newIndex)
-  store.reorderFormDataByIndex(oldIndex, newIndex)
-  console.log('排序完成:', store.formData)
-  // 更新 draggableKey 以触发重新渲染
-  draggableKey.value += 1
+// 排序处理
+const handleSort = (event: DraggableSortEvent): void => {
+  console.log('Sort event:', event)
+  store.reorderFormDataByIndex(event.oldIndex, event.newIndex)
+  // 强制刷新 Draggable key (如果 store 更新后列表渲染不正确时使用)
+  // draggableKey.value += 1;
 }
 
-// 自定义拖入处理逻辑
-const handleAdd = (event) => {
-  const { newIndex, data } = event
-  store.addComponentAtIndex(newIndex, data.id)
+function isComponentValueMapKey(key: string): key is keyof ComponentValueMap {
+  return key in initialValueMap
 }
 
-const deleteComponentHandle = (id: string, title: string) => {
+// 拖拽添加处理
+const handleAdd = (event: {
+  newIndex?: number
+  clonedData?: {
+    id: string
+    text: string
+  }
+}): void => {
+  console.log('Add event:', event)
+  const newIndex = event.newIndex
+
+  if (event.clonedData && typeof newIndex === 'number') {
+    const componentId = event.clonedData.id
+    if (componentId && store.formData.length >= newIndex && isComponentValueMapKey(componentId)) {
+      // 检查 id 和索引有效性
+      store.addComponentAtIndex(newIndex, componentId)
+      message.success(`组件已添加到位置 ${newIndex + 1}`)
+    } else {
+      console.error('无法添加组件，无效的组件 ID 或索引:', componentId, newIndex)
+    }
+  } else {
+    console.error('无效的添加事件数据:', event)
+  }
+}
+
+// 删除组件处理
+const deleteComponentHandle = (componentId: string, title: string | undefined) => {
+  // 3. 使用可选链和提供默认值
+  const displayTitle = title ?? '未命名组件'
   dialog.warning({
-    title: ` 删除组件"${title}"`,
-    content: '确定要删除该组件吗？这个操作不可撤销。',
+    title: `删除组件 "${displayTitle}"`,
+    content: '确定要删除该组件吗？此操作不可撤销。',
     positiveText: '删除',
     negativeText: '取消',
     onPositiveClick: () => {
-      store.removeComponent(id)
-      message.success('删除成功')
+      store.removeComponent(componentId)
+      if (store.currentEditComponentId === componentId) {
+        // 6. 使用 '' 重置
+        store.setCurrentEditComponentId('')
+      }
+      message.success(`组件 "${displayTitle}" 已删除`)
     },
   })
 }
 
-const scrollAreaRef = ref(null)
-
-let autoSaveInterval: NodeJS.Timeout | null = null
-
-onMounted(() => {
-  // 当窗口失焦触发自动保存
-  window.addEventListener('blur', () => {
-    saveFormHandle()
-  })
-  // 每 30 秒自动保存一次
-  autoSaveInterval = setInterval(() => {
-    saveFormHandle()
-  }, 30000)
-
-  eventBus.on('addComponent', () => {
-    nextTick(() => {
-      if (scrollAreaRef.value) {
-        // 直接滚动一个大距离，效果等同于滚动到底部
-        scrollAreaRef.value.scrollBy({
-          top: 1000000,
-          behavior: 'smooth',
-        })
-      }
-    })
-  })
-})
-
-onBeforeUnmount(() => {
-  // 清除定时器
-  if (autoSaveInterval) {
-    clearInterval(autoSaveInterval)
+// 5. 计算属性来获取当前编辑组件的属性列表 (类型安全)
+const currentEditProperties = computed(() => {
+  const component = store.getComponentById(store.currentEditComponentId)
+  if (!component || !component.value) {
+    return []
   }
-  // 移除事件监听器
-  window.removeEventListener('blur', saveFormHandle)
+  // 明确条目类型为 [string, ComponentProperty]
+  return Object.entries(component.value) as [string, ComponentProperty][]
 })
 </script>
 
@@ -152,7 +220,7 @@ onBeforeUnmount(() => {
         </n-text>
       </n-space>
       <n-space>
-        <n-button secondary @click="saveFormHandle"> 保存表单</n-button>
+        <n-button secondary @click="saveFormHandle(true)"> 保存表单</n-button>
         <n-button type="info" secondary> 预览表单</n-button>
         <n-button type="success" secondary> 发布表单</n-button>
       </n-space>
@@ -212,7 +280,7 @@ onBeforeUnmount(() => {
                           @click="
                             () => {
                               store.addComponentToFormData(btn.id as keyof ComponentValueMap)
-                              store.setCurrentEditComponentId(null)
+                              store.setCurrentEditComponentId('')
                               message.success('组件' + btn.text + '添加成功')
                             }
                           "
@@ -308,11 +376,9 @@ onBeforeUnmount(() => {
           <template #2>
             <n-scrollbar class="p-4 h-full overflow-auto">
               <div>
-                <div v-if="store.getComponentById(store.currentEditComponentId)">
+                <div v-if="store.currentEditComponentId && currentEditProperties.length > 0">
                   <div
-                    v-for="[key, property] in Object.entries(
-                      store.getComponentById(store.currentEditComponentId)?.value || {},
-                    )"
+                    v-for="[key, property] in currentEditProperties"
                     :key="key"
                     :class="{
                       'inline-block mb-2 mr-2': [
@@ -332,7 +398,7 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
                 <div v-else class="flex justify-center items-center w-full h-full">
-                  <div class="opacity-60">在左侧显示组件，开始编辑叭</div>
+                  <div class="opacity-60">在左侧选择一个组件开始编辑叭</div>
                 </div>
               </div>
             </n-scrollbar>
