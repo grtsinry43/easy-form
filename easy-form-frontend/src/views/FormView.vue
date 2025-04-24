@@ -55,11 +55,11 @@ onMounted(async () => {
     class="flex justify-center items-center min-h-[calc(100vh-64px-48px)] p-5 bg-gray-100 dark:bg-black transition-colors duration-300"
   >
     <div
-      class="relative w-full max-w-4xl min-h-[80vh] bg-white dark:bg-gray-950 rounded shadow-md dark:shadow-gray-950/50 py-10 overflow-hidden transition-all duration-300"
+      class="relative w-full mt-12 max-w-4xl min-h-[80vh] bg-white dark:bg-gray-950 rounded shadow-md dark:shadow-gray-950/50 py-10 overflow-hidden transition-all duration-300"
     >
       <!-- 纸张顶部边框 -->
       <div
-        class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-600 dark:from-green-500 dark:to-green-700"
+        class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-200 to-green-400 dark:from-green-700 dark:to-green-900"
       ></div>
 
       <!-- 纸张纹理 (仅在浅色模式显示) -->
@@ -77,6 +77,9 @@ onMounted(async () => {
             class="absolute bottom-[-8px] left-[10%] w-[80%] h-0.5 bg-gray-200 dark:bg-gray-700"
           ></span>
         </h1>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-4">
+          {{ store.formMeta.description }}
+        </p>
       </div>
 
       <!-- 问卷内容 -->

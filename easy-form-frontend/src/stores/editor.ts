@@ -50,8 +50,7 @@ export const useEditorStore = defineStore('editorStore', {
     // 初始化时可以为空，或根据需要加载默认值
     // 注意：这里的初始值可能与类型定义不完全匹配，因为它们是函数调用
     // 为了类型安全，最好在应用加载后通过 action 初始化
-    formData: [
-    ] as Array<BaseComponentType<ComponentValueMap[keyof ComponentValueMap]>>, // 添加类型断言以匹配 EditorState
+    formData: [] as Array<BaseComponentType<ComponentValueMap[keyof ComponentValueMap]>>, // 添加类型断言以匹配 EditorState
   }),
   actions: {
     setCurrentEditComponentId(id: string) {
